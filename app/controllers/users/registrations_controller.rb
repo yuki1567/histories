@@ -71,6 +71,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
   private
 
   def user_params
-    params.require(:user).permit(:email, :password, :name, :kana_name, cart_attributes: [:id])
+    params.require(:user).permit(:email, :password, :password_confirmation, :name, :kana_name, cart_attributes: [:id])
   end
 end
