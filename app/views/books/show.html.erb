@@ -1,0 +1,41 @@
+<%= render "shared/header" %>
+<main>
+  <div class="container">
+    <div class="row align-items-md-stretch my-5 pt-5">
+      <div class="col-md-6 h-100">
+        <%= image_tag @book.image.variant(resize: "300x300"), class: "card-img-top" %>
+      </div>
+      <div class="col-md-6 h-100">
+        <div class="book">
+          <h2><%= @book.title %></h5>
+          <p><%= @book.author %></p>
+          <p><%= @book.content %></p>
+          <p class="category-name"><%= @book.category.name %></p>
+          <% if user_signed_in? && current_user.admin? %>
+            <p>在庫数：<%= @book.quantity %>冊</p>
+            <div class="d-flex justify-content-around">
+              <p><%= link_to "編集", edit_book_path(@book), class: "btn btn-warning" %></p>
+              <p><%= link_to "削除", book_path(@book), method: :delete, class: "btn btn-danger" %></p>
+            </div>
+          <% end %>
+          <% if user_signed_in? && current_user.admin? %>
+          <% elsif user_signed_in? %>
+            <% if @book.quantity == 0 %>
+              <b class="text-danger">貸し出し中</b>
+            <% else %>
+              <%# <%= form_with url: user_carts_path(current_user), local: true do |f| %> %>
+                <%# <%= render "shared/error_messages", model: current_user.cart %> %>
+                <%# <%= f.hidden_field :quantity, value: 1 %> %>
+                <%# <%= f.hidden_field :book_id, value: @book.id %> %>
+                <%# <%= f.submit "カートに入れる", class: "btn btn-warning cart-btn" %> %>
+              <%# <% end %> %>
+            <% end %>
+          <% else %>
+            <%= link_to "カートに入れる", new_user_session_path, class: "btn btn-warning cart-btn" %> 
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<%= render "shared/footer" %>
