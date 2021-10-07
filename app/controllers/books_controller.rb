@@ -1,12 +1,12 @@
 class BooksController < ApplicationController
-  before_action :user_admin, only: [:new]
+  before_action :user_admin, only: [:new, :edit]
+  before_action :set_book, only: [:show, :edit, :update]
 
   def index
     @books = Book.all.order('created_at DESC')
   end
 
   def show
-    @book = Book.find(params[:id])
   end
 
   def new
@@ -22,6 +22,17 @@ class BooksController < ApplicationController
     end
   end
 
+  def edit
+  end
+
+  def update
+    if @book.update(book_params)
+      redirect_to root_path
+    else
+      render :edit
+    end
+  end
+
   private
 
   def book_params
@@ -30,5 +41,9 @@ class BooksController < ApplicationController
 
   def user_admin
     redirect_to root_path unless user_signed_in? && current_user.admin?
+  end
+
+  def set_book
+    @book = Book.find(params[:id])
   end
 end
