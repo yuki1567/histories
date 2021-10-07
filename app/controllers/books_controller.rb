@@ -2,6 +2,7 @@ class BooksController < ApplicationController
   before_action :user_admin, only: [:new]
 
   def index
+    @books = Book.all.order('created_at DESC')
   end
 
   def new
