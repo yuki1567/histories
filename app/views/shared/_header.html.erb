@@ -20,7 +20,7 @@
           </li>
           <% if user_signed_in? && current_user.admin? %>
             <li class="nav-item">
-              <%# <%= link_to "本の登録", new_book_path, class: "nav-link active text-decoration-none" %> %>
+              <%= link_to "本の登録", new_book_path, class: "nav-link active text-decoration-none" %>
             </li> 
             <li class="nav-item">
               <%# <%= link_to "ユーザー一覧", users_path, class: "nav-link active text-decoration-none" %> %>
