@@ -1,2 +1,30 @@
 <%= render "shared/header" %>
+<% if user_signed_in? && current_user.admin? %>
+  <%= render partial: "shared/admin_books", locals: {books: @books} %>
+<% else %>
+  <main>
+    <%= image_tag 'bookers.png', width: '100%', height: '400' %>
+    <div class="container">
+      <div class="books row row-cols-2 row-cols-sm-2 row-cols-md-3 my-5 g-3">
+        <% @books.each do |book| %>
+          <div class="book col">
+            <div class="card">
+              <%= link_to book_path(book), class: "text-decoration-none text-dark" do %>
+                <%= image_tag book.image.variant(resize: "500x500"), class: "card-img-top" %>
+                <div class="card-body">
+                  <h5 class="card-title"><%= book.title %></h5>
+                  <p class="card-text"><%= book.author %><p>
+                  <p class="card-text category-name"><%= book.category.name %></p>
+                  <% if book.quantity == 0 %>
+                    <b class="text-danger">貸し出し中</b>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </main>
+<% end %>
 <%= render "shared/footer" %>
