@@ -33,11 +33,11 @@
       <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control" %>
     </div>
 
-    <%# <%= f.fields_for :cart do |s| %> %>
-      <%# <div class="field"> %>
-        <%# <%= s.hidden_field :id, value: @cart.id %> %>
-      <%# </div> %>
-    <%# <% end %> %>
+    <%= f.fields_for :cart do |s| %>
+      <div class="field">
+        <%= s.hidden_field :id, value: @cart.id %>
+      </div>
+    <% end %>
   
   
     <div class="actions d-flex justify-content-center my-5">

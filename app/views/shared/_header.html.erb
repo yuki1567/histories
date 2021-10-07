@@ -13,9 +13,9 @@
           <li class="nav-item dropdown">
             <a class="nav-link active dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">カテゴリー</a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <%# <% Category.all.each do |category| %> %>
-                <%# <li><a class="dropdown-item" href="#"><%= category.name %></a></li> %>
-              <%# <% end %> %>
+              <% Category.all.each do |category| %>
+                <li><a class="dropdown-item" href="#"><%= category.name %></a></li> %>
+              <% end %>
             </ul>
           </li>
           <% if user_signed_in? && current_user.admin? %>
@@ -23,14 +23,14 @@
               <%= link_to "本の登録", new_book_path, class: "nav-link active text-decoration-none" %>
             </li> 
             <li class="nav-item">
-              <%# <%= link_to "ユーザー一覧", users_path, class: "nav-link active text-decoration-none" %> %>
+              <%= link_to "ユーザー一覧", users_path, class: "nav-link active text-decoration-none" %>
             </li>
             <li class="nav-item">
               <%= link_to "ログアウト", destroy_user_session_path, method: :delete, class: "nav-link active text-decoration-none" %>
             </li> 
           <% elsif user_signed_in? %>
             <li class="nav-item">
-              <%# <%= link_to "マイページ", user_path(current_user), class: "nav-link active text-decoration-none" %> %>
+              <%= link_to "マイページ", user_path(current_user), class: "nav-link active text-decoration-none" %>
             </li>
             <li class="nav-item">
               <%= link_to "ログアウト", destroy_user_session_path, method: :delete, class: "nav-link active text-decoration-none" %>
@@ -50,7 +50,7 @@
         </form>
         <% if user_signed_in? && current_user.admin? %>
         <% elsif user_signed_in? %>  
-          <%# <%= link_to "", user_cart_path(current_user, current_user.cart), class: "bi bi-cart-fill text-dark", style: "font-size: 2rem;"  %> %>
+          <%= link_to "", user_cart_path(current_user, current_user.cart), class: "bi bi-cart-fill text-dark", style: "font-size: 2rem;"  %>
         <% else %>
           <%= link_to "", new_user_session_path, class: "bi bi-cart-fill text-dark", style: "font-size: 2rem;" %> 
         <% end %>

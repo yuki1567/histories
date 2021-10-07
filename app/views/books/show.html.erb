@@ -23,12 +23,12 @@
             <% if @book.quantity == 0 %>
               <b class="text-danger">貸し出し中</b>
             <% else %>
-              <%# <%= form_with url: user_carts_path(current_user), local: true do |f| %> %>
-                <%# <%= render "shared/error_messages", model: current_user.cart %> %>
-                <%# <%= f.hidden_field :quantity, value: 1 %> %>
-                <%# <%= f.hidden_field :book_id, value: @book.id %> %>
-                <%# <%= f.submit "カートに入れる", class: "btn btn-warning cart-btn" %> %>
-              <%# <% end %> %>
+              <%= form_with url: user_carts_path(current_user), local: true do |f| %> 
+                <%= render "shared/error_messages", model: current_user.cart %>
+                <%= f.hidden_field :quantity, value: 1 %>
+                <%= f.hidden_field :book_id, value: @book.id %>
+                <%= f.submit "カートに入れる", class: "btn btn-warning cart-btn" %>
+              <% end %>
             <% end %>
           <% else %>
             <%= link_to "カートに入れる", new_user_session_path, class: "btn btn-warning cart-btn" %> 
