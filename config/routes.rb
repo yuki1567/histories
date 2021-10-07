@@ -6,6 +6,6 @@ Rails.application.routes.draw do
   root to: 'books#index'
   resources :books
   resources :users, only: [:index, :show] do
-    resources :carts, only: [:show, :create]
+    resources :carts, only: [:show, :create, :destroy]
   end
 end
