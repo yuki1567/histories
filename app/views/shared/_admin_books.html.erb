@@ -23,8 +23,8 @@
               <% else %>
                 <th><%= book.quantity %>冊</th>
               <% end %>
-              <%# <th><%= link_to "編集", edit_book_path(book), class: "btn btn-warning" %></th> %>
-              <%# <th><%= link_to "削除", book_path(book), method: :delete, class: "btn btn-danger" %></th> %>
+              <th><%= link_to "編集", edit_book_path(book), class: "btn btn-warning" %></th> 
+              <th><%= link_to "削除", book_path(book), method: :delete, class: "btn btn-danger" %></th>
             </tr>
           <% end %>
         </tbody>

@@ -1,6 +1,6 @@
 class BooksController < ApplicationController
-  before_action :user_admin, only: [:new, :edit]
-  before_action :set_book, only: [:show, :edit, :update]
+  before_action :user_admin, only: [:new, :edit, :destroy]
+  before_action :set_book, only: [:show, :edit, :update, :destroy]
 
   def index
     @books = Book.all.order('created_at DESC')
@@ -31,6 +31,11 @@ class BooksController < ApplicationController
     else
       render :edit
     end
+  end
+
+  def destroy
+    @book.destroy
+    redirect_to root_path
   end
 
   private
