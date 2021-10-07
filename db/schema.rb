@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_07_084433) do
+ActiveRecord::Schema.define(version: 2021_10_07_093024) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", null: false
@@ -43,6 +43,23 @@ ActiveRecord::Schema.define(version: 2021_10_07_084433) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "cart_books", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "cart_id", null: false
+    t.bigint "book_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["book_id"], name: "index_cart_books_on_book_id"
+    t.index ["cart_id"], name: "index_cart_books_on_cart_id"
+  end
+
+  create_table "carts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "quantity", default: 0, null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_carts_on_user_id"
+  end
+
   create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -59,4 +76,7 @@ ActiveRecord::Schema.define(version: 2021_10_07_084433) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "cart_books", "books"
+  add_foreign_key "cart_books", "carts"
+  add_foreign_key "carts", "users"
 end
