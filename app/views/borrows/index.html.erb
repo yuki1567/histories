@@ -1,0 +1,29 @@
+<%= render "shared/header" %>
+<main>
+  <h2 class="pt-5 text-center">過去借りた本の履歴</h2>
+  <div class="container">
+    <div class="books row row-cols-1 my-5 g-3 ">
+      <% @borrows.each do |borrow| %>
+        <% borrow.borrow_books.each do |borrow_book| %>
+          <div class="book col">
+            <div class="card">
+              <div class="row">
+                <div class="col-md-5"> 
+                  <%= image_tag borrow_book.book.image.variant(resize: "500x500"), class: "card-img-left col-md-6 h-100" %>
+                </div>
+                <div class="col-md-7">
+                  <div class="card-body">
+                    <h5 class="card-title"><%= borrow_book.book.title %></h5>
+                    <p class="card-text"><%= borrow_book.book.author %><p>
+                    <p class="card-text"><%= borrow_book.book.category.name %></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</main>
+<%= render "shared/footer" %>
