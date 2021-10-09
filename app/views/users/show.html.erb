@@ -1,0 +1,46 @@
+<%= render "shared/header" %>
+<main>
+  <div class="container">
+    <h2 class="pt-5 text-center">ユーザー登録情報</h2>
+    <div class="row mt-5">
+      <div class="col-md-4 text-center">
+        <p>名前</p>
+        <p>フリガナ</p>
+      </div>
+      <div class="col-md-4 text-center">
+        <p><%= @user.name %></p>
+        <p><%= @user.kana_name %></p>
+      </div>
+      <div class="col-md-4 text-center">
+        <p><%= link_to "登録情報の変更", edit_user_registration_path(@user), class: "btn btn-warning w-100" %></p>
+        <p><%= link_to "過去の借りた本の履歴", user_borrows_path(@user), class: "btn btn-primary w-100" %></p>
+      </div>
+    </div>
+    <h2 class="py-5 text-center">現在借りている本の一覧</h2>
+    <div class="books row row-cols-1 mb-5 g-3 ">
+      <% if @borrowing_book.present? %>
+        <% @borrow_books.each do |borrow_book| %>
+          <div class="book col">
+            <div class="card">
+              <div class="row">
+                <div class="col-md-5"> 
+                  <%= image_tag borrow_book.book.image.variant(resize: "500x500"), class: "card-img-left col-md-6 h-100" %>
+                </div>
+                <div class="col-md-7">
+                  <div class="card-body">
+                    <h5 class="card-title"><%= borrow_book.book.title %></h5>
+                    <p class="card-text"><%= borrow_book.book.author %><p>
+                    <p class="card-text"><%= borrow_book.book.category.name %></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      <% else %>
+        <b class="text-center">現在借りている本はありません</b>
+      <% end %>
+    </div>
+  </div>
+</main>
+<%= render "shared/footer" %>

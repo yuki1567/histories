@@ -28,7 +28,7 @@
     </div>
     <% if current_user.cart.cart_books.present? %>
       <div class="d-flex justify-content-center my-5">
-        <%= link_to "確認画面に進む", new_borrow_path, class: "col-md-4 btn btn-success" %>
+        <%= link_to "確認画面に進む", new_user_borrow_path, class: "col-md-4 btn btn-success" %>
       </div>
     <% else %>
       <h2 class="text-center">カートは空です</h2>
