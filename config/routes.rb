@@ -5,8 +5,8 @@ Rails.application.routes.draw do
   }
   root to: 'books#index'
   resources :books
-  resources :borrows, only: [:new, :create]
   resources :users, only: [:index, :show] do
     resources :carts, only: [:show, :create, :destroy]
+    resources :borrows, only: [:index, :new, :create]
   end
 end
