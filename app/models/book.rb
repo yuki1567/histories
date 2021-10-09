@@ -2,6 +2,8 @@ class Book < ApplicationRecord
   has_one_attached :image
   has_many :cart_boos
   has_many :carts, through: :cart_books
+  has_many :borrow_books
+  has_many :borrows, through: :borrow_books
   extend ActiveHash::Associations::ActiveRecordExtensions
   belongs_to :category
   with_options presence: true do

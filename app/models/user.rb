@@ -6,7 +6,8 @@ class User < ApplicationRecord
 
   has_one :cart, dependent: :destroy
   accepts_nested_attributes_for :cart
-  
+  has_many :borrows, dependent: :destroy
+
   with_options presence: true do
     with_options format: { with: /\A[ぁ-んァ-ヶ一-龥々ー]+\z/, message: 'is invalid. Input full-width characters' } do
       validates :name
