@@ -2,21 +2,27 @@ class BorrowsController < ApplicationController
   before_action :authenticate_user!, only: [:index, :new]
   before_action :set_cart_books, only: [:new, :create]
   before_action :move_to_index, only: [:index]
+  before_action :set_borrows, only: [:index, :update]
 
   def index
-    @borrows = @user.borrows
   end
 
   def new
-    @borrow_address = BorrowAddress.new
+    borrowing_book = current_user.borrows.where(borrowing_book: 1)
+    if borrowing_book.present?
+      flash.now[:danger] = "⚠️すでに本を借りています。再び借りるには本を返却してください。"
+      render template: 'carts/show'
+    else
+      @borrow_address = BorrowAddress.new
+    end
   end
 
   def create
     @borrow_address = BorrowAddress.new(borrow_params)
     if @borrow_address.valid?
       @cart_books.each do |cart_book, i|
-        cart_book.book.increment!(:quantity, 1)
-        current_user.cart.increment!(:quantity, 1)
+        cart_book.book.increment!(:quantity, -1)
+        current_user.cart.increment!(:quantity, -1)
         cart_book.destroy
       end
       @borrow_address.save
@@ -24,6 +30,15 @@ class BorrowsController < ApplicationController
     else
       render :new
     end
+  end
+
+  def update
+    @borrows.update(borrowing_book: 0)
+    @borrow_books = BorrowBook.where(borrow_id: @borrows)
+    @borrow_books.each do |borrow_book|
+      borrow_book.book.increment!(:quantity, 1)
+    end
+    redirect_to users_path
   end
 
   private
@@ -40,4 +55,10 @@ class BorrowsController < ApplicationController
     @user = User.find(params[:user_id])
     redirect_to root_path unless current_user.admin? || @user.id == current_user.id
   end
+
+  def set_borrows
+    @user = User.find(params[:user_id])
+    @borrows = @user.borrows
+  end
+
 end

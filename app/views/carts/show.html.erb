@@ -2,6 +2,7 @@
 <main>
   <div class="container">
     <h2 class="pt-5 text-center">カート</h2>
+    <%= render "shared/flash" %>
     <div class="books row row-cols-1 my-5 g-3 ">
       <% @cart_books.each do |cart_book| %>
         <div class="book col mb-5">
