@@ -9,6 +9,8 @@ class UsersController < ApplicationController
   end
   
   def show
+    @borrowing_book = @user.borrows.where(borrowing_book: 1)
+    @borrow_books = BorrowBook.where(borrow_id: @borrowing_book)
   end
 
   def user_admin
