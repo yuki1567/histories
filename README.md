@@ -13,7 +13,7 @@
 ### Association
 
 - has_one :cart, dependent: :destroy
-- has_one :borrow, dependent: :destroy
+- has_many :borrows, dependent: :destroy
 
 ## books テーブル
 
