@@ -7,6 +7,6 @@ Rails.application.routes.draw do
   resources :books
   resources :users, only: [:index, :show] do
     resources :carts, only: [:show, :create, :destroy]
-    resources :borrows, only: [:index, :new, :create]
+    resources :borrows, only: [:index, :new, :create, :update]
   end
 end
