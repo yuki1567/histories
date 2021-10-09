@@ -1,6 +1,11 @@
 class BorrowsController < ApplicationController
-  before_action :authenticate_user!, only: [:new]
+  before_action :authenticate_user!, only: [:index, :new]
   before_action :set_cart_books, only: [:new, :create]
+  before_action :move_to_index, only: [:index]
+
+  def index
+    @borrows = @user.borrows
+  end
 
   def new
     @borrow_address = BorrowAddress.new
@@ -10,10 +15,8 @@ class BorrowsController < ApplicationController
     @borrow_address = BorrowAddress.new(borrow_params)
     if @borrow_address.valid?
       @cart_books.each do |cart_book, i|
-        cart_book.book.quantity -= 1
-        current_user.cart.quantity -= 1
-        cart_book.book.save
-        current_user.cart.save
+        cart_book.book.increment!(:quantity, 1)
+        current_user.cart.increment!(:quantity, 1)
         cart_book.destroy
       end
       @borrow_address.save
@@ -31,5 +34,10 @@ class BorrowsController < ApplicationController
 
   def set_cart_books
     @cart_books = current_user.cart.cart_books.includes(:cart)
+  end
+
+  def move_to_index
+    @user = User.find(params[:user_id])
+    redirect_to root_path unless current_user.admin? || @user.id == current_user.id
   end
 end
