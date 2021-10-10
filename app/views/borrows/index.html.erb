@@ -3,8 +3,8 @@
   <h2 class="pt-5 text-center">過去借りた本の履歴</h2>
   <div class="container">
     <div class="books row row-cols-1 my-5 g-3 ">
-      <% @borrows.each do |borrow| %>
-        <% borrow.borrow_books.each do |borrow_book| %>
+      <% if @borrow_books.present? %>
+        <% @borrow_books.each do |borrow_book| %>
           <div class="book col">
             <div class="card">
               <div class="row">
@@ -22,6 +22,8 @@
             </div>
           </div>
         <% end %>
+      <% else %>
+        <b class="text-center">本を借りたことがありません</b>
       <% end %>
     </div>
   </div>

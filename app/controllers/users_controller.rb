@@ -13,6 +13,8 @@ class UsersController < ApplicationController
     @borrow_books = BorrowBook.where(borrow_id: @borrowing_book)
   end
 
+  private
+
   def user_admin
     redirect_to root_path unless user_signed_in? && current_user.admin?
   end
