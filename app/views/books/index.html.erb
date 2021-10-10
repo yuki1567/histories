@@ -1,6 +1,39 @@
 <%= render "shared/header" %>
 <% if user_signed_in? && current_user.admin? %>
-  <%= render partial: "shared/admin_books", locals: {books: @books} %>
+  <main>
+    <div class="container">
+      <div class="table-responsive-md my-5">
+        <table class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th>タイトル</th>
+              <th>作者</th>
+              <th>カテゴリー</th>
+              <th>在庫数</th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @books.each do |book| %>
+              <tr onclick='window.location="<%= '/books/' + book.id.to_s %>"' role="link">
+                <th ><%= book.title %></th>
+                <th><%= book.author %></th>
+                <th class="category-name"><%= book.category.name %></th>
+                <% if book.quantity == 0 %>
+                  <th>貸し出し中</th>
+                <% else %>
+                  <th><%= book.quantity %>冊</th>
+                <% end %>
+                <th><%= link_to "編集", edit_book_path(book), class: "btn btn-warning" %></th> 
+                <th><%= link_to "削除", book_path(book), method: :delete, class: "btn btn-danger" %></th>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
 <% else %>
   <main>
     <%= image_tag 'bookers.png', width: '100%', height: '400' %>

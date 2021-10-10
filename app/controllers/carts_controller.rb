@@ -28,8 +28,7 @@ class CartsController < ApplicationController
   def destroy
     cart_book = @cart.cart_books.find_by(book_id: params[:book_id])
     cart_book.destroy
-    @cart.quantity -= 1
-    @cart.save
+    @cart.increment!(:quantity, -1)
     redirect_to user_cart_path(current_user, @cart)
   end
 
