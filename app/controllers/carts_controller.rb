@@ -8,7 +8,11 @@ class CartsController < ApplicationController
 
   def create
     book = Book.find(params[:book_id])
-    unless current_user.cart.cart_books.where(book_id: book.id).present?
+    if current_user.cart.cart_books.where(book_id: book.id).present?
+      @book = Book.find(params[:book_id])
+      flash.now[:danger] = 'すでに同じ本がカートの中に入っています'
+      render template: 'books/show'
+    else
       cart = current_user.cart
       cart.quantity += params[:quantity].to_i
       if cart.save
@@ -18,10 +22,6 @@ class CartsController < ApplicationController
         @book = Book.find(params[:book_id])
         render template: 'books/show' and return
       end
-    else
-      @book = Book.find(params[:book_id])
-      flash.now[:danger] = "すでに同じ本がカートの中に入っています"
-      render template: 'books/show'
     end
   end
 

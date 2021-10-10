@@ -10,7 +10,7 @@ class BorrowsController < ApplicationController
   def new
     borrowing_book = current_user.borrows.where(borrowing_book: 1)
     if borrowing_book.present?
-      flash.now[:danger] = "⚠️すでに本を借りています。再び借りるには本を返却してください。"
+      flash.now[:danger] = '⚠️すでに本を借りています。再び借りるには本を返却してください。'
       render template: 'carts/show'
     else
       @borrow_address = BorrowAddress.new
@@ -20,7 +20,7 @@ class BorrowsController < ApplicationController
   def create
     @borrow_address = BorrowAddress.new(borrow_params)
     if @borrow_address.valid?
-      @cart_books.each do |cart_book, i|
+      @cart_books.each do |cart_book, _i|
         cart_book.book.increment!(:quantity, -1)
         current_user.cart.increment!(:quantity, -1)
         cart_book.destroy
@@ -43,7 +43,8 @@ class BorrowsController < ApplicationController
   private
 
   def borrow_params
-    params.require(:borrow_address).permit(:postal_code, :prefecture_id, :city, :street_address, :detail_address, :phone_number, book_ids: []).merge(user_id: current_user.id)
+    params.require(:borrow_address).permit(:postal_code, :prefecture_id, :city, :street_address, :detail_address, :phone_number,
+                                           book_ids: []).merge(user_id: current_user.id)
   end
 
   def set_cart_books
@@ -60,5 +61,4 @@ class BorrowsController < ApplicationController
     @borrows = @user.borrows
     @borrow_books = BorrowBook.where(borrow_id: @borrows)
   end
-
 end

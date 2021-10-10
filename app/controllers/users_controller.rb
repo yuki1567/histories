@@ -3,11 +3,10 @@ class UsersController < ApplicationController
   before_action :authenticate_user!, only: [:show]
   before_action :move_to_index, only: [:show]
 
-
   def index
     @users = User.all
   end
-  
+
   def show
     @borrowing_book = @user.borrows.where(borrowing_book: 1)
     @borrow_books = BorrowBook.where(borrow_id: @borrowing_book)
