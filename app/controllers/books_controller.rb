@@ -34,6 +34,12 @@ class BooksController < ApplicationController
   end
 
   def destroy
+    cart_books = @book.cart_books
+    if cart_books.present?
+      cart_id = cart_books.select(:cart_id)
+      cart = Cart.find_by(id: cart_id)
+      cart.increment!(:quantity, -1)
+    end
     @book.destroy
     redirect_to root_path
   end
