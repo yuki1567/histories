@@ -68,3 +68,62 @@ RSpec.describe '本の登録', type: :system do
     end
   end
 end
+
+RSpec.describe '本の一覧', type: :system do
+  let(:admin) { FactoryBot.create(:user, :a) }
+  let(:cart) { FactoryBot.create(:cart) }
+  let(:user) { cart.user }
+  let!(:book) { FactoryBot.create(:book) }
+
+  it '管理者ユーザーでログインした場合' do
+    # ログインする
+    sign_in(admin)
+    # 一覧ページに移動する
+    visit books_path
+    # 本の情報が表示されている
+    expect(page).to have_content(book.title)
+    expect(page).to have_content(book.author)
+    expect(page).to have_selector('.category-name')
+    expect(page).to have_content(book.quantity)
+    # 検索フォームが表示されている
+    expect(page).to have_content("検索")
+    # 本の登録、ユーザー一覧、ログアウトのリンクが表示されている
+    expect(page).to have_content("本の登録")
+    expect(page).to have_content("ユーザー一覧")
+    expect(page).to have_content("ログアウト")
+  end
+  it '一般ユーザーでログインした場合' do
+    # ログインする
+    sign_in(user)
+    # 一覧ページに移動する
+    visit books_path
+    # 本の情報が表示されている
+    expect(page).to have_selector('img')
+    expect(page).to have_content(book.title)
+    expect(page).to have_content(book.author)
+    expect(page).to have_selector('.category-name')
+    # 検索フォームが表示されている
+    expect(page).to have_content("検索")
+    # カートボタンが表示されている
+    expect(page).to have_selector('.bi-cart-fill')
+    # マイページ、ログアウトのリンクが表示されている
+    expect(page).to have_content("マイページ")
+    expect(page).to have_content("ログアウト")
+  end
+  it '一般ユーザーでログインした場合' do
+    # 一覧ページに移動する
+    visit books_path
+    # 本の情報が表示されている
+    expect(page).to have_selector('img')
+    expect(page).to have_content(book.title)
+    expect(page).to have_content(book.author)
+    expect(page).to have_selector('.category-name')
+    # 検索フォームが表示されている
+    expect(page).to have_content("検索")
+    # カートボタンが表示されている
+    expect(page).to have_selector('.bi-cart-fill')
+    # ログイン、新規登録のリンクが表示されている
+    expect(page).to have_content("ログイン")
+    expect(page).to have_content("新規登録")
+  end
+end
