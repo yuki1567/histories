@@ -3,7 +3,7 @@ require 'rails_helper'
 describe BooksController, type: :request do
   let(:admin) { FactoryBot.create(:user, :a) }
   let(:user) { FactoryBot.create(:user, :b) }
-  let(:book) { FactiryBot.create(:book) }
+  let!(:book) { FactoryBot.create(:book) }
   let(:book_params) do
     { book: { image: fixture_file_upload('files/test_image.jpeg'), title: 'test', author: 'test', content: 'test',
       quantity: '1', category_id: '1' } }
@@ -79,6 +79,64 @@ describe BooksController, type: :request do
       it 'エラーメッセージが表示されている' do
         post books_path, params: invalid_book_params
         expect(response.body).to include('error-message')
+      end
+    end
+  end
+
+  describe 'GET #index' do
+    context '管理者ユーザーでログインした場合' do
+      before do
+        sign_in(admin)
+      end
+      it 'indexアクションにリクエストすると正常にレスポンスが返ってくる' do
+        get root_path
+        expect(response.status).to eq 200
+      end
+      it 'indexアクションにリクエストするとレスポンスに登録済みの本のタイトルが存在する' do
+        get root_path
+        expect(response.body).to include(book.title)
+      end
+      it 'indexアクションにリクエストするとレスポンスに登録済みの本の作者が存在する' do
+        get root_path
+        expect(response.body).to include(book.author)
+      end
+      it 'indexアクションにリクエストするとレスポンスに登録済みの本のカテゴリーが存在する' do
+        get root_path
+        expect(response.body).to include(book.category.name)
+      end
+      it 'indexアクションにリクエストするとレスポンスに登録済みの本の在庫数が存在する' do
+        get root_path
+        expect(response.body).to include(book.quantity.to_s)
+      end
+      it 'indexアクションにリクエストするとレスポンスに本検索フォームが存在する' do
+        get root_path
+        expect(response.body).to include('検索')
+      end
+    end
+    context '一般ユーザーでログインもしくはログアウト状態の場合' do
+      it 'indexアクションにリクエストすると正常にレスポンスが返ってくる' do
+        get root_path
+        expect(response.status).to eq 200
+      end
+      it 'indexアクションにリクエストするとレスポンスに登録済みの本の画像が存在する' do
+        get root_path
+        expect(response.body).to include('card-img-top')
+      end
+      it 'indexアクションにリクエストするとレスポンスに登録済みの本のタイトルが存在する' do
+        get root_path
+        expect(response.body).to include(book.title)
+      end
+      it 'indexアクションにリクエストするとレスポンスに登録済みの本の作者が存在する' do
+        get root_path
+        expect(response.body).to include(book.author)
+      end
+      it 'indexアクションにリクエストするとレスポンスに登録済みの本のカテゴリーが存在する' do
+        get root_path
+        expect(response.body).to include(book.category.name)
+      end
+      it 'indexアクションにリクエストするとレスポンスに本検索フォームが存在する' do
+        get root_path
+        expect(response.body).to include('検索')
       end
     end
   end
