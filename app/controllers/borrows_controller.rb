@@ -1,8 +1,8 @@
 class BorrowsController < ApplicationController
   before_action :authenticate_user!, only: [:index, :new]
   before_action :set_cart_books, only: [:new, :create]
-  before_action :move_to_index, only: [:index]
   before_action :set_borrow_books, only: [:index, :update]
+  before_action :move_to_index, only: [:index]
 
   def index
   end
@@ -51,14 +51,13 @@ class BorrowsController < ApplicationController
     @cart_books = current_user.cart.cart_books.includes(:cart)
   end
 
-  def move_to_index
-    @user = User.find(params[:user_id])
-    redirect_to root_path unless current_user.admin? || @user.id == current_user.id
-  end
-
   def set_borrow_books
     @user = User.find(params[:user_id])
     @borrows = @user.borrows
     @borrow_books = BorrowBook.where(borrow_id: @borrows)
+  end
+
+  def move_to_index
+    redirect_to root_path unless current_user.admin? || @user.id == current_user.id 
   end
 end

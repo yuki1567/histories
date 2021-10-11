@@ -50,9 +50,9 @@
         </form>
         <% if user_signed_in? && current_user.admin? %>
         <% elsif user_signed_in? %>  
-          <%= link_to "", user_cart_path(current_user, current_user.cart), class: "bi bi-cart-fill text-dark", style: "font-size: 2rem;"  %>
+          <%= link_to "", user_cart_path(current_user, current_user.cart), class: "bi bi-cart-fill text-dark", style: "font-size: 2rem;", id: "cart-btn" %>
         <% else %>
-          <%= link_to "", new_user_session_path, class: "bi bi-cart-fill text-dark", style: "font-size: 2rem;" %> 
+          <%= link_to "", new_user_session_path, class: "bi bi-cart-fill text-dark", style: "font-size: 2rem;", id: "cart-btn" %> 
         <% end %>
       </div>  
     </div>

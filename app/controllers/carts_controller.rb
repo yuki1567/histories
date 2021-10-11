@@ -1,6 +1,7 @@
 class CartsController < ApplicationController
   before_action :authenticate_user!, only: [:show, :create]
   before_action :set_cart, only: [:show, :destroy]
+  before_action :move_to_index, only: [:show]
 
   def show
     @cart_books = @cart.cart_books.includes(:cart)
@@ -40,5 +41,10 @@ class CartsController < ApplicationController
 
   def set_cart
     @cart = Cart.find(params[:id])
+  end
+
+  def move_to_index
+    @user = User.find(params[:user_id])
+    redirect_to root_path unless @user.id == current_user.id && @cart.id == current_user.cart.id
   end
 end
