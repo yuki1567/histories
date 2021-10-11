@@ -2,10 +2,12 @@ require 'rails_helper'
 
 RSpec.describe 'UsersRegistration', type: :request do
   let(:user_params) do
-    {  user: { email: "a@com", password: "password", password_confirmation: "password", name: "山田", kana_name: "ヤマダ", cart_attributes: 1 } }
+    {  user: { email: 'a@com', password: 'password', password_confirmation: 'password', name: '山田', kana_name: 'ヤマダ',
+               cart_attributes: 1 } }
   end
   let(:invalid_user_params) do
-    {  user: { email: "", password: "password", password_confirmation: "password", name: "山田", kana_name: "ヤマダ", cart_attributes: 1 } }
+    {  user: { email: '', password: 'password', password_confirmation: 'password', name: '山田', kana_name: 'ヤマダ',
+               cart_attributes: 1 } }
   end
 
   describe 'GET #new' do
@@ -55,7 +57,7 @@ RSpec.describe 'UsersSession', type: :request do
     { user: { email: user.email, password: user.password } }
   end
   let(:invalid_session_params) do
-    { user: { email: "", password: user.password } }
+    { user: { email: '', password: user.password } }
   end
 
   describe 'GET #new' do
@@ -80,14 +82,14 @@ RSpec.describe 'UsersSession', type: :request do
         expect(response).to redirect_to root_path
       end
     end
-    context " ログインに失敗した場合" do
+    context ' ログインに失敗した場合' do
       it 'createアクションにレスポンスすると正常にレスポンスが返ってきていない' do
         post user_session_path, params: invalid_session_params
         expect(response.status).not_to eq 302
       end
       it 'エラーメッセージが表示されている' do
         post user_session_path, params: invalid_session_params
-        expect(response.body).to include("login-flash-message")
+        expect(response.body).to include('login-flash-message')
       end
     end
   end

@@ -12,9 +12,9 @@ RSpec.describe 'カートに本の追加', type: :system do
       # 本詳細ページに移動する
       visit book_path(book)
       # カートに入れるを押すとCartBookモデルのカウントが１増えることを確認する
-      expect{
+      expect do
         find('input[value="カートに入れる"]').click
-      }.to change { CartBook.count }.by(1)
+      end.to change { CartBook.count }.by(1)
       # トップページに遷移したことを確認する
       expect(current_path).to eq(root_path)
       # カートページに移動する
@@ -33,9 +33,9 @@ RSpec.describe 'カートに本の追加', type: :system do
       # 本の詳細ページに移動する
       visit book_path(book)
       # # カートに入れるを押すとCartBookモデルのカウントが上がらないことを確認する
-      expect{
-        find(".cart-btn").click
-      }.to change { CartBook.count }.by(0)
+      expect do
+        find('.cart-btn').click
+      end.to change { CartBook.count }.by(0)
       # ログインページに遷移することを確認する
       expect(current_path).to eq(new_user_session_path)
     end
@@ -45,9 +45,9 @@ RSpec.describe 'カートに本の追加', type: :system do
       # 本詳細ページに移動する
       visit book_path(book)
       # カートに入れるを押すとCartBookモデルのカウントが上がらないことを確認する
-      expect{
+      expect do
         find('input[value="カートに入れる"]').click
-      }.to change { CartBook.count }.by(0)
+      end.to change { CartBook.count }.by(0)
       # 本詳細ページに遷移していることを確認する
       expect(current_path).to eq(user_carts_path(user))
     end
@@ -57,9 +57,9 @@ RSpec.describe 'カートに本の追加', type: :system do
       # 本詳細ページに移動する
       visit book_path(book)
       # カートに入れるを押すとCartBookモデルのカウントが上がらないことを確認する
-      expect{
+      expect do
         find('input[value="カートに入れる"]').click
-      }.to change { CartBook.count }.by(0)
+      end.to change { CartBook.count }.by(0)
       # 本詳細ページに遷移していることを確認する
       expect(current_path).to eq(user_carts_path(user))
     end
@@ -76,7 +76,7 @@ RSpec.describe 'カート詳細' do
       # ログインする
       sign_in(user)
       # カートページに遷移するボタンがあることを確認する
-      expect(page).to have_selector(".bi-cart-fill")
+      expect(page).to have_selector('.bi-cart-fill')
       # カートページに移動する
       visit user_cart_path(user, cart)
       # カートに追加した本の情報が表示されていることを確認する
@@ -85,10 +85,10 @@ RSpec.describe 'カート詳細' do
       expect(page).to have_content(cart_book.book.author)
       expect(page).to have_selector('.category-name')
       # 詳細、削除ボタンがあることを確認する
-      expect(page).to have_content("詳細")
-      expect(page).to have_content("削除")
+      expect(page).to have_content('詳細')
+      expect(page).to have_content('削除')
       # 本貸し出しページに遷移するボタンがあることを確認する
-      expect(page).to have_content("確認画面に進む")
+      expect(page).to have_content('確認画面に進む')
     end
   end
   context 'カートページに遷移できない場合' do
@@ -96,7 +96,7 @@ RSpec.describe 'カート詳細' do
       # トップページに移動する
       visit root_path
       # カートページに遷移するボタンを押す
-      click_on("cart-btn")
+      click_on('cart-btn')
       # ログインページに遷移することを確認する
       expect(current_path).to eq(new_user_session_path)
     end
@@ -115,11 +115,11 @@ RSpec.describe 'カートの本の削除' do
     # カートページに移動する
     visit user_cart_path(user, cart)
     # 削除ボタンがあることを確認する
-    expect(page).to have_content("削除")
+    expect(page).to have_content('削除')
     # 削除ボタンを押すとCartBookモデルのレコードが１減ることを確認する
-    expect{
-      find_link("削除").click
-    }.to change { CartBook.count }.by(-1)
+    expect do
+      find_link('削除').click
+    end.to change { CartBook.count }.by(-1)
     # カートページに遷移することを確認する
     expect(current_path).to eq(user_cart_path(user, cart))
     # カートの中の本が削除されていることを確認する

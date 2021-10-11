@@ -123,4 +123,3 @@ RSpec.describe 'ログイン', type: :system do
     end
   end
 end
-

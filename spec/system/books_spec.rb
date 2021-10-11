@@ -86,13 +86,12 @@ RSpec.describe '本の一覧', type: :system do
     expect(page).to have_selector('.category-name')
     expect(page).to have_content(book.quantity)
     # 本の登録、ユーザー一覧、ログアウトのリンクが表示されている
-    expect(page).to have_content("本の登録")
-    expect(page).to have_content("ユーザー一覧")
-    expect(page).to have_content("ログアウト")
+    expect(page).to have_content('本の登録')
+    expect(page).to have_content('ユーザー一覧')
+    expect(page).to have_content('ログアウト')
     # 本の編集ページに遷移するボタンや削除ボタン
     expect(page).to have_content('編集')
     expect(page).to have_content('削除')
-
   end
   it '一般ユーザーでログインした場合はマイページとログアウトリンクが表示されている' do
     # ログインする
@@ -107,8 +106,8 @@ RSpec.describe '本の一覧', type: :system do
     # カートボタンが表示されている
     expect(page).to have_selector('.bi-cart-fill')
     # マイページ、ログアウトのリンクが表示されている
-    expect(page).to have_content("マイページ")
-    expect(page).to have_content("ログアウト")
+    expect(page).to have_content('マイページ')
+    expect(page).to have_content('ログアウト')
   end
   it 'ログアウト状態の場合はログインと新規登録リンクが表示されている' do
     # 一覧ページに移動する
@@ -121,8 +120,8 @@ RSpec.describe '本の一覧', type: :system do
     # カートボタンが表示されている
     expect(page).to have_selector('.bi-cart-fill')
     # ログイン、新規登録のリンクが表示されている
-    expect(page).to have_content("ログイン")
-    expect(page).to have_content("新規登録")
+    expect(page).to have_content('ログイン')
+    expect(page).to have_content('新規登録')
   end
 end
 

@@ -9,10 +9,10 @@ RSpec.describe 'Carts', type: :request do
     { quantity: 1, book_id: book.id }
   end
   let(:cart_book_params) do
-    { cart_book_id: cart_book.id, book_id: book.id, cart_id: cart.id } 
+    { cart_book_id: cart_book.id, book_id: book.id, cart_id: cart.id }
   end
   let(:invalid_cart_params) do
-    { quantity: 11, book_id: book.id } 
+    { quantity: 11, book_id: book.id }
   end
   let(:another_cart) { FactoryBot.create(:cart) }
   let(:another_user) { another_cart.user }
@@ -55,7 +55,7 @@ RSpec.describe 'Carts', type: :request do
       end
       it 'エラーメッセージが表示されている' do
         post user_carts_path(user), params: invalid_cart_params
-        expect(response.body).to include("error-message")
+        expect(response.body).to include('error-message')
       end
     end
   end
@@ -133,7 +133,7 @@ RSpec.describe 'Carts', type: :request do
     end
     it 'データベースから削除されている' do
       expect do
-        delete user_cart_path(user, cart), params: { book_id: cart_book.book.id } 
+        delete user_cart_path(user, cart), params: { book_id: cart_book.book.id }
       end.to change(CartBook, :count).by(-1)
     end
     it 'カートページに遷移すること' do

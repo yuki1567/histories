@@ -7,10 +7,10 @@ describe BooksController, type: :request do
   let!(:book) { FactoryBot.create(:book) }
   let(:book_params) do
     { book: { image: fixture_file_upload('files/test_image.jpeg'), title: 'test', author: 'test', content: 'test',
-      quantity: '1', category_id: '1' } }
+              quantity: '1', category_id: '1' } }
   end
   let(:invalid_book_params) do
-    { book: { title: "" } }
+    { book: { title: '' } }
   end
 
   describe 'GET #new' do
@@ -369,12 +369,12 @@ describe BooksController, type: :request do
         expect(response.status).not_to eq 302
       end
       it 'データベースから削除されていない' do
-        expect  do
+        expect do
           delete book_path(book), params: { id: book.id }
         end.to change(Book, :count).by(0)
       end
       it 'トップページに遷移すること' do
-        delete book_path(book), params: { id: book.id } 
+        delete book_path(book), params: { id: book.id }
         expect(response).to redirect_to root_path
       end
     end
@@ -384,7 +384,7 @@ describe BooksController, type: :request do
         expect(response.status).not_to eq 302
       end
       it 'データベースから削除されていない' do
-        expect  do
+        expect do
           delete book_path(book), params: { id: book.id }
         end.to change(Book, :count).by(0)
       end
