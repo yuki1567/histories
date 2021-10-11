@@ -11,10 +11,10 @@ RSpec.describe 'カートに本の追加', type: :system do
       sign_in(user)
       # 本詳細ページに移動する
       visit book_path(book)
-      # カートに入れるを押すとCartモデルのカウントが変わらないこととCartBookモデルのカウントが１増えることを確認する
+      # カートに入れるを押すとCartBookモデルのカウントが１増えることを確認する
       expect{
         find('input[value="カートに入れる"]').click
-      }.to change { Cart.count }.by(0).and change { CartBook.count }.by(1)
+      }.to change { CartBook.count }.by(1)
       # トップページに遷移したことを確認する
       expect(current_path).to eq(root_path)
       # カートページに移動する
@@ -32,10 +32,10 @@ RSpec.describe 'カートに本の追加', type: :system do
     it 'ログアウト状態では本の追加はできない' do
       # 本の詳細ページに移動する
       visit book_path(book)
-      # # カートに入れるを押すとCartモデルとCartBookモデルのカウントが上がらないことを確認する
+      # # カートに入れるを押すとCartBookモデルのカウントが上がらないことを確認する
       expect{
         find(".cart-btn").click
-      }.to change { Cart.count }.by(0).and change { CartBook.count }.by(0)
+      }.to change { CartBook.count }.by(0)
       # ログインページに遷移することを確認する
       expect(current_path).to eq(new_user_session_path)
     end
@@ -44,10 +44,10 @@ RSpec.describe 'カートに本の追加', type: :system do
       sign_in(user)
       # 本詳細ページに移動する
       visit book_path(book)
-      # カートに入れるを押すとCartモデルとCartBookモデルのカウントが上がらないことを確認する
+      # カートに入れるを押すとCartBookモデルのカウントが上がらないことを確認する
       expect{
         find('input[value="カートに入れる"]').click
-      }.to change { Cart.count }.by(0).and change { CartBook.count }.by(0)
+      }.to change { CartBook.count }.by(0)
       # 本詳細ページに遷移していることを確認する
       expect(current_path).to eq(user_carts_path(user))
     end
@@ -56,10 +56,10 @@ RSpec.describe 'カートに本の追加', type: :system do
       sign_in(user)
       # 本詳細ページに移動する
       visit book_path(book)
-      # カートに入れるを押すとCartモデルとCartBookモデルのカウントが上がらないことを確認する
+      # カートに入れるを押すとCartBookモデルのカウントが上がらないことを確認する
       expect{
         find('input[value="カートに入れる"]').click
-      }.to change { Cart.count }.by(0).and change { CartBook.count }.by(0)
+      }.to change { CartBook.count }.by(0)
       # 本詳細ページに遷移していることを確認する
       expect(current_path).to eq(user_carts_path(user))
     end
@@ -100,5 +100,29 @@ RSpec.describe 'カート詳細' do
       # ログインページに遷移することを確認する
       expect(current_path).to eq(new_user_session_path)
     end
+  end
+end
+
+RSpec.describe 'カートの本の削除' do
+  let(:cart_book) { FactoryBot.create(:cart_book) }
+  let(:cart) { cart_book.cart }
+  let(:user) { cart_book.cart.user }
+  let(:book) { cart_book.book }
+
+  it 'ログインしていればカートの本を削除できる' do
+    # ログインする
+    sign_in(user)
+    # カートページに移動する
+    visit user_cart_path(user, cart)
+    # 削除ボタンがあることを確認する
+    expect(page).to have_content("削除")
+    # 削除ボタンを押すとCartBookモデルのレコードが１減ることを確認する
+    expect{
+      find_link("削除").click
+    }.to change { CartBook.count }.by(-1)
+    # カートページに遷移することを確認する
+    expect(current_path).to eq(user_cart_path(user, cart))
+    # カートの中の本が削除されていることを確認する
+    expect(page).to have_no_content(book.title)
   end
 end
