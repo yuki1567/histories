@@ -175,3 +175,93 @@ RSpec.describe '本の詳細', type: :system do
     expect(page).to have_no_content('削除')
   end
 end
+
+RSpec.describe '本の編集', type: :system do
+  let(:admin) { FactoryBot.create(:user, :a) }
+  let(:cart) { FactoryBot.create(:cart) }
+  let(:user) { cart.user }
+  let!(:book) { FactoryBot.create(:book) }
+
+  context '本の編集ができるとき' do
+    it '管理者ユーザーでログインし、正しい情報を入力すれば本の編集ができる' do
+      # ログインする
+      sign_in(admin)
+      # 本編集ページへ遷移するボタンがあることを確認する
+      expect(page).to have_content('編集')
+      # 本編集ページに移動する
+      visit edit_book_path(book)
+      # 既に登録済みの本の情報が入っていることを確認する
+      expect(
+        find('#book_title').value
+      ).to eq(book.title)
+      expect(
+        find('#book_author').value
+      ).to eq(book.author)
+      expect(
+        find('#book_content').value
+      ).to eq(book.content)
+      expect(
+        find('#category').value
+      ).to eq(book.category.id.to_s)
+      expect(
+        find('#book_quantity').value
+      ).to eq(book.quantity.to_s)
+      # 登録内容を編集する
+      fill_in 'タイトル', with: "#{book.title}+編集したタイトル"
+      # 編集してもBookモデルのカウントが変わらないことを確認する
+      expect  do
+        find('input[name="commit"]').click
+      end.to change { Book.count }.by(0)
+      # トップページに遷移する
+      expect(current_path).to eq(root_path)
+      # トップページに先ほど変更した本の登録情報が存在することを確認する
+      expect(page).to have_content(book.title)
+    end
+  end
+  context '本の編集ができないとき' do
+    it '管理者ユーザーでログインしても誤った情報では本の編集ができない' do
+      # ログインする
+      sign_in(admin)
+      # 本編集ページへ遷移するボタンがあることを確認する
+      expect(page).to have_content('編集')
+      # 本編集ページに移動する
+      visit edit_book_path(book)
+      # 既に登録済みの本の情報が入っていることを確認する
+      expect(
+        find('#book_title').value
+      ).to eq(book.title)
+      expect(
+        find('#book_author').value
+      ).to eq(book.author)
+      expect(
+        find('#book_content').value
+      ).to eq(book.content)
+      expect(
+        find('#category').value
+      ).to eq(book.category.id.to_s)
+      expect(
+        find('#book_quantity').value
+      ).to eq(book.quantity.to_s)
+      # 登録内容を編集する
+      fill_in 'タイトル', with: ''
+      # 編集してもBookモデルのカウントが変わらないことを確認する
+      expect  do
+        find('input[name="commit"]').click
+      end.to change { Book.count }.by(0)
+      # 本編集ページに遷移したことを確認する
+      expect(current_path).to eq(book_path(book))
+    end
+    it '一般ユーザーでログインしても本編集ページに移動できない' do
+      # ログインする
+      sign_in(user)
+      # 本編集ページへ遷移するボタンがないことを確認する
+      expect(page).to have_no_content('編集')
+    end
+    it 'ログアウト状態では本編集ページに移動できない' do
+      # トップページに移動する
+      visit root_path
+      # 本編集ページへ遷移するボタンがないことを確認する
+      expect(page).to have_no_content('編集')
+    end
+  end
+end
