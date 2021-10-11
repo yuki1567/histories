@@ -301,4 +301,43 @@ describe BooksController, type: :request do
       end
     end
   end
+
+  describe 'PUT #update' do
+    before do
+      sign_in(admin)
+    end
+    context '保存に成功した場合' do
+      it 'updateアクションにレスポンスすると正常にレスポンスが返ってきている' do
+        put book_path(book), params: book_params
+        expect(response.status).to eq 302
+      end
+      it 'データベースが更新している' do
+        put book_path(book), params: book_params
+        expect(book.reload.title).to eq('test')
+      end
+      it 'Bookモデルのカウントが増減していない' do
+        expect { put book_path(book), params: book_params }.not_to change(Book, :count)
+      end
+      it 'トップページに遷移すること' do
+        put book_path(book), params: book_params
+        expect(response).to redirect_to root_path
+      end
+    end
+    context '保存に失敗した場合' do
+      before do
+        sign_in(admin)
+      end
+      it 'データベースが更新していない' do
+        put book_path(book), params: invalid_book_params
+        expect(book.reload.title).not_to eq('test')
+      end
+      it 'Bookモデルのカウントが増減していない' do
+        expect { put book_path(book), params: invalid_book_params }.not_to change(Book, :count)
+      end
+      it 'エラーメッセージが表示されているか' do
+        put book_path(book), params: invalid_book_params
+        expect(response.body).to include('error-message')
+      end
+    end
+  end
 end
