@@ -1,7 +1,7 @@
 class CartsController < ApplicationController
-  before_action :authenticate_user!, only: [:show, :create]
+  before_action :authenticate_user!, only: [:show, :create, :destroy]
   before_action :set_cart, only: [:show, :destroy]
-  before_action :move_to_index, only: [:show]
+  before_action :move_to_index, only: [:show, :destroy]
 
   def show
     @cart_books = @cart.cart_books.includes(:cart)

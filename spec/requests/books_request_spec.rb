@@ -364,6 +364,10 @@ describe BooksController, type: :request do
       before do
         sign_in(user)
       end
+      it 'destroyアクションにレスポンスすると正常にレスポンスが返ってきていない' do
+        delete book_path(book), params: { id: book.id }
+        expect(response.status).not_to eq 302
+      end
       it 'データベースから削除されていない' do
         expect  do
           delete book_path(book), params: { id: book.id }
@@ -375,6 +379,10 @@ describe BooksController, type: :request do
       end
     end
     context 'ログインアウト状態の場合削除できない' do
+      it 'destroyアクションにレスポンスすると正常にレスポンスが返ってきていない' do
+        delete book_path(book), params: { id: book.id }
+        expect(response.status).not_to eq 302
+      end
       it 'データベースから削除されていない' do
         expect  do
           delete book_path(book), params: { id: book.id }
