@@ -75,7 +75,7 @@ RSpec.describe '本の一覧', type: :system do
   let(:user) { cart.user }
   let!(:book) { FactoryBot.create(:book) }
 
-  it '管理者ユーザーでログインした場合' do
+  it '管理者ユーザーでログインした場合は本の登録とユーザー一覧ログアウトリンクが表示されている' do
     # ログインする
     sign_in(admin)
     # 一覧ページに移動する
@@ -89,8 +89,12 @@ RSpec.describe '本の一覧', type: :system do
     expect(page).to have_content("本の登録")
     expect(page).to have_content("ユーザー一覧")
     expect(page).to have_content("ログアウト")
+    # 本の編集ページに遷移するボタンや削除ボタン
+    expect(page).to have_content('編集')
+    expect(page).to have_content('削除')
+
   end
-  it '一般ユーザーでログインした場合' do
+  it '一般ユーザーでログインした場合はマイページとログアウトリンクが表示されている' do
     # ログインする
     sign_in(user)
     # 一覧ページに移動する
@@ -106,7 +110,7 @@ RSpec.describe '本の一覧', type: :system do
     expect(page).to have_content("マイページ")
     expect(page).to have_content("ログアウト")
   end
-  it '一般ユーザーでログインした場合' do
+  it 'ログアウト状態の場合はログインと新規登録リンクが表示されている' do
     # 一覧ページに移動する
     visit books_path
     # 本の情報が表示されている
@@ -140,7 +144,7 @@ RSpec.describe '本の詳細', type: :system do
     expect(page).to have_content(book.content)
     expect(page).to have_selector('.category-name')
     expect(page).to have_content(book.quantity)
-    # 本の編集ページに遷移するボタンや削除ボタン、コメント投稿フォームが表示されている
+    # 本の編集ページに遷移するボタンや削除ボタン
     expect(page).to have_content('編集')
     expect(page).to have_content('削除')
   end
@@ -170,7 +174,7 @@ RSpec.describe '本の詳細', type: :system do
     expect(page).to have_content(book.author)
     expect(page).to have_content(book.content)
     expect(page).to have_selector('.category-name')
-    # 本の編集ページに遷移するボタンや削除ボタン、コメント投稿フォームが表示されていない
+    # 本の編集ページに遷移するボタンや削除ボタンが表示されていない
     expect(page).to have_no_content('編集')
     expect(page).to have_no_content('削除')
   end
@@ -272,28 +276,32 @@ RSpec.describe '本の削除', type: :system do
   let(:user) { cart.user }
   let!(:book) { FactoryBot.create(:book) }
 
-  it '管理者ユーザーでログインしているとき本の削除ができる' do
-    # ログインする
-    sign_in(admin)
-    # トップ画面に本の削除のボタンがあることを確認する
-    expect(page).to have_content('削除')
-    # 本を削除するとレコードの数が１減ることを確認する
-    expect do
-      click_link '削除'
-    end.to change { Book.count }.by(-1)
-    # トップ画面に遷移したことを確認する
-    expect(current_path).to eq(root_path)
-    # トップページに削除した本の情報が存在しないことを確認する
-    expect(page).to have_no_content(book.to_s)
+  context '本の削除ができる場合' do
+    it '管理者ユーザーでログインしているとき本の削除ができる' do
+      # ログインする
+      sign_in(admin)
+      # トップ画面に本の削除のボタンがあることを確認する
+      expect(page).to have_content('削除')
+      # 本を削除するとレコードの数が１減ることを確認する
+      expect do
+        click_link '削除'
+      end.to change { Book.count }.by(-1)
+      # トップ画面に遷移したことを確認する
+      expect(current_path).to eq(root_path)
+      # トップページに削除した本の情報が存在しないことを確認する
+      expect(page).to have_no_content(book.to_s)
+    end
   end
-  it '一般ユーザーでログインしている場合は本の削除はできない' do
-    # ログインする
-    sign_in(user)
-    # トップ画面に本の削除のボタンがないことを確認する
-    expect(page).to have_no_content('削除')
-  end
-  it 'ログアウト状態の場合は本の削除はできない' do
-    # トップ画面に本の削除のボタンがないことを確認する
-    expect(page).to have_no_content('削除')
+  context '本の削除ができない場合' do
+    it '一般ユーザーでログインしている場合は本の削除はできない' do
+      # ログインする
+      sign_in(user)
+      # トップ画面に本の削除のボタンがないことを確認する
+      expect(page).to have_no_content('削除')
+    end
+    it 'ログアウト状態の場合は本の削除はできない' do
+      # トップ画面に本の削除のボタンがないことを確認する
+      expect(page).to have_no_content('削除')
+    end
   end
 end
