@@ -41,6 +41,7 @@ RSpec.describe 'Carts', type: :request do
         expect(response).to redirect_to root_path
       end
     end
+
     context '保存に失敗した場合' do
       it 'データベースが更新していない' do
         post user_carts_path(user), params: invalid_cart_params
@@ -64,6 +65,7 @@ RSpec.describe 'Carts', type: :request do
       before do
         sign_in(user)
       end
+
       it 'showアクションにリクエストすると正常にレスポンスが返ってくる' do
         get user_cart_path(user, cart)
         expect(response.status).to eq 200
@@ -85,6 +87,7 @@ RSpec.describe 'Carts', type: :request do
         expect(response.body).to include(cart_book.book.category.name)
       end
     end
+
     context 'ログイン状態で他のユーザーのカートページに遷移しようとした場合' do
       before do
         sign_in(another_user)
@@ -99,6 +102,7 @@ RSpec.describe 'Carts', type: :request do
         expect(response).to redirect_to root_path
       end
     end
+
     context 'ログアウト状態の場合' do
       it 'showアクションにリクエストすると正常にレスポンスが返ってきていない' do
         get user_cart_path(user, cart)
@@ -108,6 +112,33 @@ RSpec.describe 'Carts', type: :request do
         get user_cart_path(user, cart)
         expect(response).to redirect_to new_user_session_path
       end
+    end
+  end
+
+  describe 'DELETE #destroy' do
+    before do
+      sign_in(user)
+    end
+
+    it 'destroyアクションにレスポンスすると正常にレスポンスが返ってきている' do
+      delete user_cart_path(user, cart), params: { book_id: cart_book.book.id }
+      expect(response.status).to eq 302
+    end
+    it 'データベースが更新している' do
+      delete user_cart_path(user, cart), params: { book_id: cart_book.book.id }
+      expect(cart.reload.quantity).to eq(-1)
+    end
+    it 'Cartモデルのカウントが増減していない' do
+      expect { delete user_cart_path(user, cart), params: { book_id: cart_book.book.id } }.not_to change(Cart, :count)
+    end
+    it 'データベースから削除されている' do
+      expect do
+        delete user_cart_path(user, cart), params: { book_id: cart_book.book.id } 
+      end.to change(CartBook, :count).by(-1)
+    end
+    it 'カートページに遷移すること' do
+      delete user_cart_path(user, cart), params: { book_id: cart_book.book.id }
+      expect(response).to redirect_to user_cart_path(user, cart)
     end
   end
 end
