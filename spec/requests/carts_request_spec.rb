@@ -14,6 +14,8 @@ RSpec.describe 'Carts', type: :request do
   let(:invalid_cart_params) do
     { quantity: 11, book_id: book.id } 
   end
+  let(:another_cart) { FactoryBot.create(:cart) }
+  let(:another_user) { another_cart.user }
 
   describe 'POST #create' do
     before do
@@ -53,6 +55,58 @@ RSpec.describe 'Carts', type: :request do
       it 'エラーメッセージが表示されている' do
         post user_carts_path(user), params: invalid_cart_params
         expect(response.body).to include("error-message")
+      end
+    end
+  end
+
+  describe 'GET #show' do
+    context 'ログイン状態の場合' do
+      before do
+        sign_in(user)
+      end
+      it 'showアクションにリクエストすると正常にレスポンスが返ってくる' do
+        get user_cart_path(user, cart)
+        expect(response.status).to eq 200
+      end
+      it 'showアクションにリクエストするとレスポンスにカートに入れた本の画像が存在する' do
+        get user_cart_path(user, cart)
+        expect(response.body).to include('card-img-left')
+      end
+      it 'showアクションにリクエストするとレスポンスにカートに入れた本のタイトルが存在する' do
+        get user_cart_path(user, cart)
+        expect(response.body).to include(cart_book.book.title)
+      end
+      it 'showアクションにリクエストするとレスポンスにカートに入れた本の作者が存在する' do
+        get user_cart_path(user, cart)
+        expect(response.body).to include(cart_book.book.author)
+      end
+      it 'showアクションにリクエストするとレスポンスにカートに入れた本のカテゴリーが存在する' do
+        get user_cart_path(user, cart)
+        expect(response.body).to include(cart_book.book.category.name)
+      end
+    end
+    context 'ログイン状態で他のユーザーのカートページに遷移しようとした場合' do
+      before do
+        sign_in(another_user)
+      end
+
+      it 'showアクションにリクエストすると正常にレスポンスが返ってきていない' do
+        get user_cart_path(user, cart)
+        expect(response.status).not_to eq 200
+      end
+      it 'トップページに遷移すること' do
+        get user_cart_path(user, cart)
+        expect(response).to redirect_to root_path
+      end
+    end
+    context 'ログアウト状態の場合' do
+      it 'showアクションにリクエストすると正常にレスポンスが返ってきていない' do
+        get user_cart_path(user, cart)
+        expect(response.status).not_to eq 200
+      end
+      it 'ログインページに遷移すること' do
+        get user_cart_path(user, cart)
+        expect(response).to redirect_to new_user_session_path
       end
     end
   end
