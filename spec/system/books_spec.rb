@@ -121,3 +121,57 @@ RSpec.describe '本の一覧', type: :system do
     expect(page).to have_content("新規登録")
   end
 end
+
+RSpec.describe '本の詳細', type: :system do
+  let(:admin) { FactoryBot.create(:user, :a) }
+  let(:cart) { FactoryBot.create(:cart) }
+  let(:user) { cart.user }
+  let!(:book) { FactoryBot.create(:book) }
+
+  it '管理者ユーザーでログインした場合は本の編集ページヘ遷移するボタンと削除ボタンが表示される' do
+    # ログインする
+    sign_in(admin)
+    # 詳細ページに移動する
+    visit book_path(book)
+    # 詳細ページに本の情報が含まれている
+    expect(page).to have_selector('img')
+    expect(page).to have_content(book.title)
+    expect(page).to have_content(book.author)
+    expect(page).to have_content(book.content)
+    expect(page).to have_selector('.category-name')
+    expect(page).to have_content(book.quantity)
+    # 本の編集ページに遷移するボタンや削除ボタン、コメント投稿フォームが表示されている
+    expect(page).to have_content('編集')
+    expect(page).to have_content('削除')
+  end
+  it '一般ユーザーでログインした場合は本の編集ページヘ遷移するボタンと削除ボタンが表示されない' do
+    # ログインする
+    sign_in(user)
+    # 本をクリックすると詳細ページに移動する
+    visit book_path(book)
+    # 詳細ページに本の情報が含まれている
+    expect(page).to have_selector('img')
+    expect(page).to have_content(book.title)
+    expect(page).to have_content(book.author)
+    expect(page).to have_content(book.content)
+    expect(page).to have_selector('.category-name')
+    # 本の編集ページに遷移するボタンや削除ボタンが表示されていない
+    expect(page).to have_no_content('編集')
+    expect(page).to have_no_content('削除')
+  end
+  it 'ログアウト状態の場合は本の編集ページヘ遷移するボタンと削除ボタンが表示されない' do
+    # トップページに移動する
+    visit root_path
+    # 本をクリックすると本詳細ページに移動する
+    visit book_path(book)
+    # 詳細ページに本の情報が含まれている
+    expect(page).to have_selector('img')
+    expect(page).to have_content(book.title)
+    expect(page).to have_content(book.author)
+    expect(page).to have_content(book.content)
+    expect(page).to have_selector('.category-name')
+    # 本の編集ページに遷移するボタンや削除ボタン、コメント投稿フォームが表示されていない
+    expect(page).to have_no_content('編集')
+    expect(page).to have_no_content('削除')
+  end
+end
