@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  before_action :basic_auth
+  before_action :basic_auth if Rails.env.production?
   before_action :store_current_location, unless: :devise_controller?
   add_flash_types :success, :info, :warning, :danger
 
