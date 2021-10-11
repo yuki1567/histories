@@ -265,3 +265,35 @@ RSpec.describe '本の編集', type: :system do
     end
   end
 end
+
+RSpec.describe '本の削除', type: :system do
+  let(:admin) { FactoryBot.create(:user, :a) }
+  let(:cart) { FactoryBot.create(:cart) }
+  let(:user) { cart.user }
+  let!(:book) { FactoryBot.create(:book) }
+
+  it '管理者ユーザーでログインしているとき本の削除ができる' do
+    # ログインする
+    sign_in(admin)
+    # トップ画面に本の削除のボタンがあることを確認する
+    expect(page).to have_content('削除')
+    # 本を削除するとレコードの数が１減ることを確認する
+    expect do
+      click_link '削除'
+    end.to change { Book.count }.by(-1)
+    # トップ画面に遷移したことを確認する
+    expect(current_path).to eq(root_path)
+    # トップページに削除した本の情報が存在しないことを確認する
+    expect(page).to have_no_content(book.to_s)
+  end
+  it '一般ユーザーでログインしている場合は本の削除はできない' do
+    # ログインする
+    sign_in(user)
+    # トップ画面に本の削除のボタンがないことを確認する
+    expect(page).to have_no_content('削除')
+  end
+  it 'ログアウト状態の場合は本の削除はできない' do
+    # トップ画面に本の削除のボタンがないことを確認する
+    expect(page).to have_no_content('削除')
+  end
+end
