@@ -262,4 +262,43 @@ describe BooksController, type: :request do
       end
     end
   end
+
+  describe 'GET #edit' do
+    context '管理者ユーザーでログインした場合' do
+      before do
+        sign_in(admin)
+      end
+      it 'editアクションにリクエストすると正常にレスポンスが返ってくる' do
+        get edit_book_path(book)
+        expect(response.status).to eq 200
+      end
+      it 'editアクションにリクエストするとレスポンスに本編集フォームが存在する' do
+        get new_book_path(book)
+        expect(response.body).to include('登録')
+      end
+    end
+    context '一般ユーザーででログインした場合' do
+      before do
+        sign_in(user)
+      end
+      it 'editアクションにリクエストすると正常にレスポンスが返ってきていない' do
+        get edit_book_path(book)
+        expect(response.status).not_to eq 200
+      end
+      it 'トップページに遷移すること' do
+        get edit_book_path(book)
+        expect(response).to redirect_to root_path
+      end
+    end
+    context 'ログアウト状態の場合' do
+      it 'editアクションにリクエストすると正常にレスポンスが返ってきていない' do
+        get edit_book_path(book)
+        expect(response.status).not_to eq 200
+      end
+      it 'トップページに遷移すること' do
+        get edit_book_path(book)
+        expect(response).to redirect_to root_path
+      end
+    end
+  end
 end
