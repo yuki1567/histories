@@ -85,8 +85,6 @@ RSpec.describe '本の一覧', type: :system do
     expect(page).to have_content(book.author)
     expect(page).to have_selector('.category-name')
     expect(page).to have_content(book.quantity)
-    # 検索フォームが表示されている
-    expect(page).to have_content("検索")
     # 本の登録、ユーザー一覧、ログアウトのリンクが表示されている
     expect(page).to have_content("本の登録")
     expect(page).to have_content("ユーザー一覧")
@@ -102,8 +100,6 @@ RSpec.describe '本の一覧', type: :system do
     expect(page).to have_content(book.title)
     expect(page).to have_content(book.author)
     expect(page).to have_selector('.category-name')
-    # 検索フォームが表示されている
-    expect(page).to have_content("検索")
     # カートボタンが表示されている
     expect(page).to have_selector('.bi-cart-fill')
     # マイページ、ログアウトのリンクが表示されている
@@ -118,8 +114,6 @@ RSpec.describe '本の一覧', type: :system do
     expect(page).to have_content(book.title)
     expect(page).to have_content(book.author)
     expect(page).to have_selector('.category-name')
-    # 検索フォームが表示されている
-    expect(page).to have_content("検索")
     # カートボタンが表示されている
     expect(page).to have_selector('.bi-cart-fill')
     # ログイン、新規登録のリンクが表示されている
