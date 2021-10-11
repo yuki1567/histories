@@ -6,7 +6,7 @@ FactoryBot.define do
     quantity    { Faker::Number.non_zero_digit }
     category    { Category.all.sample }
     after(:build) do |book|
-      book.image.attach(io: File.open('public/images/test1_image.png'), filename: 'test1_image.png')
+      book.image.attach(io: File.open('public/images/test_image.png'), filename: 'test1_image.png')
     end
   end
 end
