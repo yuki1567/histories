@@ -65,3 +65,40 @@ RSpec.describe 'カートに本の追加', type: :system do
     end
   end
 end
+
+RSpec.describe 'カート詳細' do
+  let(:cart_book) { FactoryBot.create(:cart_book) }
+  let(:cart) { cart_book.cart }
+  let(:user) { cart_book.cart.user }
+
+  context 'カートページに遷移できる場合' do
+    it 'ログインしているユーザーなら自身のカートページに遷移できる' do
+      # ログインする
+      sign_in(user)
+      # カートページに遷移するボタンがあることを確認する
+      expect(page).to have_selector(".bi-cart-fill")
+      # カートページに移動する
+      visit user_cart_path(user, cart)
+      # カートに追加した本の情報が表示されていることを確認する
+      expect(page).to have_selector('img')
+      expect(page).to have_content(cart_book.book.title)
+      expect(page).to have_content(cart_book.book.author)
+      expect(page).to have_selector('.category-name')
+      # 詳細、削除ボタンがあることを確認する
+      expect(page).to have_content("詳細")
+      expect(page).to have_content("削除")
+      # 本貸し出しページに遷移するボタンがあることを確認する
+      expect(page).to have_content("確認画面に進む")
+    end
+  end
+  context 'カートページに遷移できない場合' do
+    it 'ログアウト状態ではカートページに遷移できない' do
+      # トップページに移動する
+      visit root_path
+      # カートページに遷移するボタンを押す
+      click_on("cart-btn")
+      # ログインページに遷移することを確認する
+      expect(current_path).to eq(new_user_session_path)
+    end
+  end
+end
