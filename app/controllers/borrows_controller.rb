@@ -20,7 +20,7 @@ class BorrowsController < ApplicationController
   def create
     @borrow_address = BorrowAddress.new(borrow_params)
     if @borrow_address.valid?
-      @cart_books.each do |cart_book, _i|
+      @cart_books.each do |cart_book|
         cart_book.book.increment!(:quantity, -1)
         current_user.cart.increment!(:quantity, -1)
         cart_book.destroy
