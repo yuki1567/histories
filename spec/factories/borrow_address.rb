@@ -6,5 +6,8 @@ FactoryBot.define do
     street_address { Faker::Address.street_address }
     detail_address { Faker::Address.building_number }
     phone_number   { Faker::Number.leading_zero_number(digits: 11) }
+
+    association :book
+    
   end
 end
