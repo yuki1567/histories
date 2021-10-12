@@ -6,10 +6,7 @@ RSpec.describe 'Carts', type: :request do
   let(:user) { cart_book.cart.user }
   let(:book) { FactoryBot.create(:book) }
   let(:cart_params) do
-    { quantity: 1, book_id: book.id }
-  end
-  let(:cart_book_params) do
-    { cart_book_id: cart_book.id, book_id: book.id, cart_id: cart.id }
+    { quantity: 1, book_id: book.id, art_book_id: cart_book.id, cart_id: cart.id }
   end
   let(:invalid_cart_params) do
     { quantity: 11, book_id: book.id }
@@ -30,11 +27,11 @@ RSpec.describe 'Carts', type: :request do
         post user_carts_path(user), params: cart_params
         expect(cart.reload.quantity).to eq(1)
       end
-      it 'Cartモデルのカウントが増減していない' do
+      it 'Cartのカウントが増減していない' do
         expect { post user_carts_path(user), params: cart_params }.not_to change(Cart, :count)
       end
-      it 'CartBookテーブルに保存ができている' do
-        expect { post user_carts_path(user), params: cart_book_params }.to change(CartBook, :count).by(1)
+      it 'CartBookに保存ができている' do
+        expect { post user_carts_path(user), params: cart_params }.to change(CartBook, :count).by(1)
       end
       it 'トップページに遷移すること' do
         post user_carts_path(user), params: cart_params

@@ -315,7 +315,7 @@ describe BooksController, type: :request do
         put book_path(book), params: book_params
         expect(book.reload.title).to eq('test')
       end
-      it 'Bookモデルのカウントが増減していない' do
+      it 'Booksテーブルが増減していない' do
         expect { put book_path(book), params: book_params }.not_to change(Book, :count)
       end
       it 'トップページに遷移すること' do
@@ -331,7 +331,7 @@ describe BooksController, type: :request do
         put book_path(book), params: invalid_book_params
         expect(book.reload.title).not_to eq('test')
       end
-      it 'Bookモデルのカウントが増減していない' do
+      it 'Bookテーブルが増減していない' do
         expect { put book_path(book), params: invalid_book_params }.not_to change(Book, :count)
       end
       it 'エラーメッセージが表示されているか' do
