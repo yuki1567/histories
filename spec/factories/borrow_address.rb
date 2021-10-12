@@ -7,7 +7,6 @@ FactoryBot.define do
     detail_address { Faker::Address.building_number }
     phone_number   { Faker::Number.leading_zero_number(digits: 11) }
 
-    association :book
-    
+    association :user, :b
   end
 end

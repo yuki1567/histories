@@ -10,8 +10,8 @@ class BorrowsController < ApplicationController
   def new
     borrowing_book = current_user.borrows.where(borrowing_book: 1)
     if borrowing_book.present?
-      flash.now[:danger] = '⚠️すでに本を借りています。再び借りるには本を返却してください。'
-      render template: 'carts/show'
+      flash[:danger] = '⚠️すでに本を借りています。再び借りるには本を返却してください。'
+      redirect_to user_cart_path(current_user, current_user.cart)
     else
       @borrow_address = BorrowAddress.new
     end

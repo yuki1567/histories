@@ -1,10 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe 'Borrows', type: :request do
-  let(:cart_book) { FactoryBot.create(:cart_book, cart_id: cart.id) }
+  let(:cart_book) { FactoryBot.create(:cart_book, cart_id: cart.id, book_id: book.id) }
   let(:cart) { FactoryBot.create(:cart, quantity: 1) }
   let(:user) { cart_book.cart.user }
-  let(:book) { cart_book.book }
+  let(:book) { FactoryBot.create(:book, quantity: 1) }
   let(:borrow_params) do
     { borrow_address: { postal_code: "123-4567", prefecture_id: "1", city: "test", street_address: "test", detail_address: "test", phone_number: "09012345678", book_ids: [book.id] } }
   end
@@ -59,6 +59,10 @@ RSpec.describe 'Borrows', type: :request do
       end
       it 'Addressesテーブルに保存ができた' do
         expect { post user_borrows_path(user), params: borrow_params }.to change(Address, :count).by(1)
+      end
+      it 'Cartsテーブルのquantityが０になった' do
+        post user_borrows_path(user), params: borrow_params
+        expect(cart.reload.quantity).to eq(0)
       end
       it 'Cartsテーブルのquantityが０になった' do
         post user_borrows_path(user), params: borrow_params

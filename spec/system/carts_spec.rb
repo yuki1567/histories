@@ -32,7 +32,7 @@ RSpec.describe 'カートに本の追加', type: :system do
     it 'ログアウト状態では本の追加はできない' do
       # 本の詳細ページに移動する
       visit book_path(book)
-      # # カートに入れるを押すとCartBookモデルのカウントが上がらないことを確認する
+      # カートに入れるを押すとCartBookモデルのカウントが上がらないことを確認する
       expect do
         find('.cart-btn').click
       end.to change { CartBook.count }.by(0)
