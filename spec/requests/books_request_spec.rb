@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe BooksController, type: :request do
+RSpec.describe 'Books', type: :request do
   let(:admin) { FactoryBot.create(:user, :a) }
   let(:cart) { FactoryBot.create(:cart) }
   let(:user) { cart.user }
