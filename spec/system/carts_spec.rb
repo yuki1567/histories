@@ -70,6 +70,8 @@ RSpec.describe 'カート詳細' do
   let(:cart_book) { FactoryBot.create(:cart_book) }
   let(:cart) { cart_book.cart }
   let(:user) { cart_book.cart.user }
+  let(:another_cart) { FactoryBot.create(:cart) }
+  let(:another_user) { another_cart.user }
 
   context 'カートページに遷移できる場合' do
     it 'ログインしているユーザーなら自身のカートページに遷移できる' do
@@ -92,6 +94,16 @@ RSpec.describe 'カート詳細' do
     end
   end
   context 'カートページに遷移できない場合' do
+    it 'ログインしていても他のユーザーのカートページには遷移できない' do
+      # ログインする
+      sign_in(another_user)
+      # カートページに遷移するボタンがあることを確認する
+      expect(page).to have_selector('.bi-cart-fill')
+      # カートページに移動する
+      visit user_cart_path(user, cart)
+      # トップページに遷移することを確認する
+      expect(current_path).to eq(root_path)
+    end
     it 'ログアウト状態ではカートページに遷移できない' do
       # トップページに移動する
       visit root_path
