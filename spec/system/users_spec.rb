@@ -130,7 +130,7 @@ RSpec.describe 'ユーザー一覧', type: :system do
   let!(:user) { cart.user }
 
   context 'ユーザー一覧が見られる場合' do
-    it '管理者ユーザーでログイン状態ならばユーザー一覧が見られる' do
+    it '管理者ユーザーでログイン状態ならユーザー一覧が見られる' do
       # ログインする
       sign_in(admin)
       # トップページに移動する
@@ -162,6 +162,73 @@ RSpec.describe 'ユーザー一覧', type: :system do
       visit users_path
       # トップページに遷移していることを確認する
       expect(current_path).to eq(root_path)
+    end
+  end
+end
+
+RSpec.describe 'マイページ', type: :system do
+  let(:admin) { FactoryBot.create(:user, :a) }
+  let(:cart) { FactoryBot.create(:cart) }
+  let(:user) { cart.user }
+  let!(:borrow) { FactoryBot.create(:borrow, borrowing_book: 1, user_id: user.id) }
+  let!(:borrow_book) { FactoryBot.create(:borrow_book, borrow_id: borrow.id) }
+  let(:another_cart) { FactoryBot.create(:cart) }
+  let(:another_user) { another_cart.user }  
+
+  context 'マイページを見られる場合' do
+    it '管理者ユーザーでログイン状態ならマイページを見られる' do
+      # ログインする
+      sign_in(admin)
+      # ユーザーのマイページに移動する
+      visit user_path(user)
+      # そのユーザーのユーザー情報が表示されている
+      expect(page).to have_content(user.name)
+      expect(page).to have_content(user.kana_name)
+      expect(page).to have_content(user.email)
+      # 登録情報の変更、借りた本の履歴、本返却確認済みボタンが表示されている
+      expect(page).to have_content("登録情報の変更")
+      expect(page).to have_content("借りた本の履歴")
+      expect(page).to have_content("返却確認済み")
+      # 現在借りている本が表示されている
+      expect(page).to have_selector('img')
+      expect(page).to have_content(borrow_book.book.title)
+      expect(page).to have_content(borrow_book.book.author)
+      expect(page).to have_selector('.category-name')
+    end
+    it '一般ユーザーでログイン状態なら自身のマイページを見られる' do
+      # ログインする
+      sign_in(user)
+      # マイページに移動する
+      visit user_path(user)
+      # ユーザー情報が表示されている
+      expect(page).to have_content(user.name)
+      expect(page).to have_content(user.kana_name)
+      expect(page).to have_content(user.email)
+      # 登録情報の変更、借りた本の履歴ボタンが表示されていて本の返却確認済みのボタンが表示されていない
+      expect(page).to have_content("登録情報の変更")
+      expect(page).to have_content("借りた本の履歴")
+      expect(page).to have_no_content("返却確認済み")
+      # 現在借りている本が表示されている
+      expect(page).to have_selector('img')
+      expect(page).to have_content(borrow_book.book.title)
+      expect(page).to have_content(borrow_book.book.author)
+      expect(page).to have_selector('.category-name')
+    end
+  end
+  context 'マイページを見られない場合' do
+    it '一般ユーザーでログイン状態でも他のユーザーのマイページは見られない' do
+      # ログインする
+      sign_in(another_user)
+      # 他のユーザーのマイページに移動する
+      visit user_path(user)
+      # トップページに遷移することを確認する
+      expect(current_path).to eq(root_path)
+    end
+    it 'ログアウト状態ではマイページを見られない' do
+      # ユーザーのマイページに移動する
+      visit user_path(user)
+      # トップページに遷移することを確認する
+      expect(current_path).to eq(new_user_session_path)
     end
   end
 end
