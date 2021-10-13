@@ -24,8 +24,8 @@
               <% else %>
                 <th></th>
               <% end %>
-              <th><%= link_to "編集", "#", class: "btn btn-warning" %></th>
-              <th><%= link_to "削除", "#", class: "btn btn-danger" %></th>
+              <th><%= link_to "編集", edit_user_path(user), class: "btn btn-warning" %></th>
+              <th><%= link_to "削除", user_path(user), method: :delete, class: "btn btn-danger" %></th>
             </tr>
           <% end %>
         </tbody>

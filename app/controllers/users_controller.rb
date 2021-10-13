@@ -1,8 +1,8 @@
 class UsersController < ApplicationController
-  before_action :admin_only, only: [:index]
+  before_action :admin_only, only: [:index, :destroy]
   before_action :authenticate_user!, only: [:show, :edit]
   before_action :move_to_index, only: [:show, :edit]
-  before_action :set_user, only: [:edit, :update]
+  before_action :set_user, only: [:edit, :update, :destroy]
 
   def index
     @users = User.all
@@ -22,6 +22,11 @@ class UsersController < ApplicationController
     else
       render :edit
     end
+  end
+
+  def destroy
+    @user.destroy
+    redirect_to users_path
   end
 
   private

@@ -241,4 +241,50 @@ RSpec.describe 'Users', type: :request do
       end
     end
   end
+
+  describe 'DELETE #destroy' do
+    context '管理者ユーザーでログインした場合' do
+      before do
+        sign_in(admin)
+      end
+      it 'destroyアクションにレスポンスすると正常にレスポンスが返ってきている' do
+        delete user_path(user), params: { id: user.id }
+        expect(response.status).to eq 302
+      end
+      it 'データベースから削除されている' do
+        expect do
+          delete user_path(user), params: { id: user.id }
+        end.to change(User, :count).by(-1)
+      end
+      it 'ユーザー一覧ページに遷移すること' do
+        delete user_path(user), params: { id: user.id }
+        expect(response).to redirect_to users_path
+      end
+    end
+    context '一般ユーザーでログインした場合' do
+      before do
+        sign_in(user)
+      end
+      it 'データベースから削除されていない' do
+        expect do
+          delete user_path(user), params: { id: user.id }
+        end.to change(User, :count).by(0)
+      end
+      it 'トップページに遷移すること' do
+        delete user_path(user), params: { id: user.id }
+        expect(response).to redirect_to root_path
+      end
+    end
+    context 'ログインアウト状態の場合' do
+      it 'データベースから削除されていない' do
+        expect do
+          delete user_path(user), params: { id: user.id }
+        end.to change(User, :count).by(0)
+      end
+      it 'トップページに遷移すること' do
+        delete user_path(user), params: { id: user.id }
+        expect(response).to redirect_to root_path
+      end
+    end
+  end
 end
