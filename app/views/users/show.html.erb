@@ -14,7 +14,7 @@
         <p><%= @user.email%></p>
       </div>
       <div class="col-md-4 text-center">
-        <p><%= link_to "登録情報の変更", edit_user_registration_path(@user), class: "btn btn-warning w-100" %></p>
+        <p><%= link_to "登録情報の変更", edit_user_path(@user), class: "btn btn-warning w-100" %></p>
         <p><%= link_to "借りた本の履歴", user_borrows_path(@user), class: "btn btn-primary w-100" %></p>
         <% if @borrowing_book.present? && current_user.admin? %>
           <p><%= link_to "返却確認済み", user_borrow_path(@user), method: :patch, class: "btn btn-success w-100" %></p>

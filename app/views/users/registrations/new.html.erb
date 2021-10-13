@@ -23,7 +23,7 @@
     <div class="field col-md-4 mx-auto">
       <%= f.label :password, "パスワード", class: "form-label" %>
       <% if @minimum_password_length %>
-      <em>(<%= @minimum_password_length %> characters minimum)</em>
+      <em>(最低6文字以上必要です)</em>
       <% end %><br />
       <%= f.password_field :password, autocomplete: "new-password", class: "form-control" %>
     </div>
