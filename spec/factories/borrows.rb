@@ -1,5 +1,5 @@
 FactoryBot.define do
   factory :borrow do
-    association :user
+    association :user, :b
   end
 end

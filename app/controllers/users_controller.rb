@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :user_admin, only: [:index]
+  before_action :admin_only, only: [:index]
   before_action :authenticate_user!, only: [:show]
   before_action :move_to_index, only: [:show]
 
@@ -14,7 +14,7 @@ class UsersController < ApplicationController
 
   private
 
-  def user_admin
+  def admin_only
     redirect_to root_path unless user_signed_in? && current_user.admin?
   end
 

@@ -11,6 +11,9 @@ RSpec.describe 'Borrows', type: :request do
   let(:invalid_borrow_params) do
     { borrow_address: { postal_code: "" } }
   end
+  let(:admin) { FactoryBot.create(:user, :a) }
+  let!(:borrow) { FactoryBot.create(:borrow) }
+  let(:borrow_user) { borrow.user }
   
   describe 'GET #new' do
     context 'ログイン状態の場合' do
@@ -98,6 +101,28 @@ RSpec.describe 'Borrows', type: :request do
         post user_borrows_path(user), params: invalid_borrow_params
         expect(response.body).to include("error-message")
       end
+    end
+  end
+
+  describe 'PUT #update' do
+    before do
+      sign_in(admin)
+    end
+
+    it 'updateアクションにレスポンスすると正常にレスポンスが返ってきている' do
+      put user_borrow_path(borrow_user, borrow)
+      expect(response.status).to eq 302
+    end
+    it 'データベースが更新している' do
+      put user_borrow_path(borrow_user, borrow), params: { user_id: borrow_user.id }
+      expect(borrow.reload.borrowing_book).to eq(false)
+    end
+    it 'Borrowsテーブルが増減していない' do
+      expect { put user_borrow_path(borrow_user, borrow) }.not_to change(Borrow, :count)
+    end
+    it 'ユーザー一覧に遷移していること' do
+      put user_borrow_path(user, borrow)
+      expect(response).to redirect_to users_path
     end
   end
 end

@@ -27,10 +27,10 @@ RSpec.describe 'Carts', type: :request do
         post user_carts_path(user), params: cart_params
         expect(cart.reload.quantity).to eq(1)
       end
-      it 'Cartのカウントが増減していない' do
+      it 'Cartsテーブルのカウントが増減していない' do
         expect { post user_carts_path(user), params: cart_params }.not_to change(Cart, :count)
       end
-      it 'CartBookに保存ができている' do
+      it 'CartBooksテーブルに保存ができている' do
         expect { post user_carts_path(user), params: cart_params }.to change(CartBook, :count).by(1)
       end
       it 'トップページに遷移すること' do
@@ -44,7 +44,7 @@ RSpec.describe 'Carts', type: :request do
         post user_carts_path(user), params: invalid_cart_params
         expect(cart.reload.quantity).not_to eq(11)
       end
-      it 'Cartモデルのカウントが増減していない' do
+      it 'Cartsテーブルのカウントが増減していない' do
         expect { post user_carts_path(user), params: invalid_cart_params }.not_to change(Cart, :count)
       end
       it 'CartBookテーブルに保存ができていない' do
@@ -125,7 +125,7 @@ RSpec.describe 'Carts', type: :request do
       delete user_cart_path(user, cart), params: { book_id: cart_book.book.id }
       expect(cart.reload.quantity).to eq(-1)
     end
-    it 'Cartモデルのカウントが増減していない' do
+    it 'Cartsテーブルのカウントが増減していない' do
       expect { delete user_cart_path(user, cart), params: { book_id: cart_book.book.id } }.not_to change(Cart, :count)
     end
     it 'データベースから削除されている' do
