@@ -65,4 +65,93 @@ RSpec.describe 'Users', type: :request do
       end
     end
   end
+
+  describe 'GET #show' do
+    context '管理者ユーザーでログイン状態の場合' do
+      before do
+        sign_in(admin)
+      end
+  
+      it 'showアクションにリクエストすると正常にレスポンスが返ってくる' do
+        get user_path(user)
+        expect(response.status).to eq 200
+      end
+      it 'showアクションにリクエストするとレスポンスに登録済みのユーザーの名前が存在する' do
+        get user_path(user)
+        expect(response.body).to include(user.name)
+      end
+      it 'showアクションにリクエストするとレスポンスに登録済みのユーザーのフリガナが存在する' do
+        get user_path(user)
+        expect(response.body).to include(user.kana_name)
+      end
+      it 'showアクションにリクエストするとレスポンスに登録済みのユーザーのメールアドレスが存在する' do
+        get user_path(user)
+        expect(response.body).to include(user.email)
+      end
+      it 'showアクションにリクエストするとレスポンスに現在借りている本の画像が存在する' do
+        get user_path(user)
+        expect(response.body).to include('card-img-left')
+      end
+      it 'showアクションにリクエストするとレスポンスに現在借りている本のタイトルが存在する' do
+        get user_path(user)
+        expect(response.body).to include(borrow_book.book.title)
+      end
+      it 'showアクションにリクエストするとレスポンスに現在借りている本の作者が存在する' do
+        get user_path(user)
+        expect(response.body).to include(borrow_book.book.author)
+      end
+      it 'showアクションにリクエストするとレスポンスに現在借りている本のカテゴリーが存在する' do
+        get user_path(user)
+        expect(response.body).to include(borrow_book.book.category.name)
+      end
+    end
+    context '一般ユーザーでログイン状態の場合' do
+      before do
+        sign_in(user)
+      end
+  
+      it 'showアクションにリクエストすると正常にレスポンスが返ってくる' do
+        get user_path(user)
+        expect(response.status).to eq 200
+      end
+      it 'showアクションにリクエストするとレスポンスに登録済みのユーザーの名前が存在する' do
+        get user_path(user)
+        expect(response.body).to include(user.name)
+      end
+      it 'showアクションにリクエストするとレスポンスに登録済みのユーザーのフリガナが存在する' do
+        get user_path(user)
+        expect(response.body).to include(user.kana_name)
+      end
+      it 'showアクションにリクエストするとレスポンスに登録済みのユーザーのメールアドレスが存在する' do
+        get user_path(user)
+        expect(response.body).to include(user.email)
+      end
+      it 'showアクションにリクエストするとレスポンスに現在借りている本の画像が存在する' do
+        get user_path(user)
+        expect(response.body).to include('card-img-left')
+      end
+      it 'showアクションにリクエストするとレスポンスに現在借りている本のタイトルが存在する' do
+        get user_path(user)
+        expect(response.body).to include(borrow_book.book.title)
+      end
+      it 'showアクションにリクエストするとレスポンスに現在借りている本の作者が存在する' do
+        get user_path(user)
+        expect(response.body).to include(borrow_book.book.author)
+      end
+      it 'showアクションにリクエストするとレスポンスに現在借りている本のカテゴリーが存在する' do
+        get user_path(user)
+        expect(response.body).to include(borrow_book.book.category.name)
+      end
+    end
+    context 'ログアウト状態の場合' do
+      it 'showアクションにリクエストすると正常にレスポンスが返ってくる' do
+        get user_path(user)
+        expect(response.status).not_to eq 200
+      end
+      it 'ログインページに遷移している' do
+        get user_path(user)
+        expect(response).to redirect_to new_user_session_path
+      end
+    end
+  end
 end
