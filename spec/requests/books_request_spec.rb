@@ -327,6 +327,10 @@ RSpec.describe 'Books', type: :request do
       before do
         sign_in(admin)
       end
+      it 'updateアクションにレスポンスすると正常にレスポンスが返ってきていない' do
+        put book_path(book), params: invalid_book_params
+        expect(response.status).not_to eq 302
+      end
       it 'データベースが更新していない' do
         put book_path(book), params: invalid_book_params
         expect(book.reload.title).not_to eq('test')
@@ -360,13 +364,9 @@ RSpec.describe 'Books', type: :request do
         expect(response).to redirect_to root_path
       end
     end
-    context '一般ユーザーでログインした場合削除できない' do
+    context '一般ユーザーでログインした場合' do
       before do
         sign_in(user)
-      end
-      it 'destroyアクションにレスポンスすると正常にレスポンスが返ってきていない' do
-        delete book_path(book), params: { id: book.id }
-        expect(response.status).not_to eq 302
       end
       it 'データベースから削除されていない' do
         expect do
@@ -378,11 +378,7 @@ RSpec.describe 'Books', type: :request do
         expect(response).to redirect_to root_path
       end
     end
-    context 'ログインアウト状態の場合削除できない' do
-      it 'destroyアクションにレスポンスすると正常にレスポンスが返ってきていない' do
-        delete book_path(book), params: { id: book.id }
-        expect(response.status).not_to eq 302
-      end
+    context 'ログインアウト状態の場合' do
       it 'データベースから削除されていない' do
         expect do
           delete book_path(book), params: { id: book.id }
