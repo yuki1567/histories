@@ -288,7 +288,7 @@ RSpec.describe '本の削除', type: :system do
       # トップ画面に遷移したことを確認する
       expect(current_path).to eq(root_path)
       # トップページに削除した本の情報が存在しないことを確認する
-      expect(page).to have_no_content(book.to_s)
+      expect(page).to have_no_content(book.title)
     end
   end
   context '本の削除ができない場合' do

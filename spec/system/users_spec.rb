@@ -319,3 +319,27 @@ RSpec.describe 'ユーザー情報の編集', type: :system do
     end
   end
 end
+
+RSpec.describe 'ユーザーの削除', type: :system do 
+  let(:admin) { FactoryBot.create(:user, :a) }
+  let!(:user) { FactoryBot.create(:user, :b) }
+
+  context 'ユーザー削除できる場合' do
+    it '管理者ユーザーでログイン状態の場合ユーザー削除できる' do
+      # ログインする
+      sign_in(admin)
+      # ユーザー一覧ページに移動する
+      visit users_path
+      # 削除ボタンがあることを確認する
+      expect(page).to have_content("削除")
+      # 削除ボタンを押すとUserモデルのカウントがい減ることを確認する
+      expect {
+        click_on("削除")
+      }.to change { User.count}.by(-1)
+      # ユーザー一覧ページに遷移したことを確認する
+      expect(current_path).to eq(users_path)
+      # ユーザー一覧ページに削除したユーザーの情報が存在しないことを確認する
+      expect(page).to have_no_content(user.name)
+    end
+  end
+end
