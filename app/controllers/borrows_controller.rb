@@ -1,10 +1,12 @@
 class BorrowsController < ApplicationController
   before_action :authenticate_user!, only: [:index, :new]
   before_action :set_cart_books, only: [:new, :create]
-  before_action :set_borrow_books, only: [:index, :update]
+  before_action :set_user, only: [:index, :update]
   before_action :move_to_index, only: [:index]
 
   def index
+    @borrows = @user.borrows
+    @borrow_books = BorrowBook.where(borrow_id: @borrows).order("created_at DESC")
   end
 
   def new
@@ -33,10 +35,12 @@ class BorrowsController < ApplicationController
   end
 
   def update
-    @borrows.update(borrowing_book: 0)
-    @borrow_books.each do |borrow_book|
+    borrows = @user.borrows.where(borrowing_book: 1)
+    borrow_books = BorrowBook.where(borrow_id: borrows)
+    borrow_books.each do |borrow_book|
       borrow_book.book.increment!(:quantity, 1)
     end
+    borrows.update(borrowing_book: 0)
     redirect_to users_path
   end
 
@@ -51,10 +55,8 @@ class BorrowsController < ApplicationController
     @cart_books = current_user.cart.cart_books.includes(:cart)
   end
 
-  def set_borrow_books
+  def set_user
     @user = User.find(params[:user_id])
-    @borrows = @user.borrows
-    @borrow_books = BorrowBook.where(borrow_id: @borrows)
   end
 
   def move_to_index

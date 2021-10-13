@@ -12,8 +12,10 @@ RSpec.describe 'Borrows', type: :request do
     { borrow_address: { postal_code: "" } }
   end
   let(:admin) { FactoryBot.create(:user, :a) }
-  let!(:borrow) { FactoryBot.create(:borrow) }
-  let(:borrow_user) { borrow.user }
+  let!(:borrow_book) {FactoryBot.create(:borrow_book) }
+  let(:borrow) { borrow_book.borrow }
+  let(:borrow_user) { borrow_book.borrow.user }
+  let!(:borrow_user_cart) { FactoryBot.create(:cart, user_id: borrow_user.id) }
   
   describe 'GET #new' do
     context 'ログイン状態の場合' do
@@ -123,6 +125,71 @@ RSpec.describe 'Borrows', type: :request do
     it 'ユーザー一覧に遷移していること' do
       put user_borrow_path(user, borrow)
       expect(response).to redirect_to users_path
+    end
+  end
+
+  describe 'GET #index' do
+    context '管理者ユーザーでログインした場合' do
+      before do
+        sign_in(admin)
+      end
+
+      it 'indexアクションにリクエストすると正常にレスポンスが返ってくる' do
+        get user_borrows_path(borrow_user)
+        expect(response.status).to eq 200
+      end
+      it 'indexアクションにリクエストするとレスポンスに過去に借りた本の画像が存在する' do
+        get user_borrows_path(borrow_user)
+        expect(response.body).to include('card-img-left')
+      end
+      it 'indexアクションにリクエストするとレスポンスに過去に借りた本のタイトルが存在する' do
+        get user_borrows_path(borrow_user)
+        expect(response.body).to include(borrow_book.book.title)
+      end
+      it 'indexアクションにリクエストするとレスポンスに過去に借りた本の作者が存在する' do
+        get user_borrows_path(borrow_user)
+        expect(response.body).to include(borrow_book.book.author)
+      end
+      it 'indexアクションにリクエストするとレスポンスに過去に借りた本のカテゴリーが存在する' do
+        get user_borrows_path(borrow_user)
+        expect(response.body).to include(borrow_book.book.category.name)
+      end
+    end
+    context '一般ユーザーでログインした場合' do
+      before do
+        sign_in(borrow_user)
+      end
+
+      it 'indexアクションにリクエストすると正常にレスポンスが返ってくる' do
+        get user_borrows_path(borrow_user)
+        expect(response.status).to eq 200
+      end
+      it 'indexアクションにリクエストするとレスポンスに過去に借りた本の画像が存在する' do
+        get user_borrows_path(borrow_user)
+        expect(response.body).to include('card-img-left')
+      end
+      it 'indexアクションにリクエストするとレスポンスに過去に借りた本のタイトルが存在する' do
+        get user_borrows_path(borrow_user)
+        expect(response.body).to include(borrow_book.book.title)
+      end
+      it 'indexアクションにリクエストするとレスポンスに過去に借りた本の作者が存在する' do
+        get user_borrows_path(borrow_user)
+        expect(response.body).to include(borrow_book.book.author)
+      end
+      it 'indexアクションにリクエストするとレスポンスに過去に借りた本のカテゴリーが存在する' do
+        get user_borrows_path(borrow_user)
+        expect(response.body).to include(borrow_book.book.category.name)
+      end
+    end
+    context 'ログアウト状態の場合' do
+      it 'indexアクションにリクエストすると正常にレスポンスが返っていない' do
+        get user_borrows_path(borrow_user)
+        expect(response.status).not_to eq 200
+      end
+      it 'ログインページに遷移すること' do
+        get user_borrows_path(borrow_user)
+        expect(response).to redirect_to new_user_session_path 
+      end
     end
   end
 end
