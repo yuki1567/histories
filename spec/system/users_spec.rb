@@ -232,3 +232,90 @@ RSpec.describe 'マイページ', type: :system do
     end
   end
 end
+
+RSpec.describe 'ユーザー情報の編集', type: :system do
+  let(:admin) { FactoryBot.create(:user, :a) }
+  let(:cart) { FactoryBot.create(:cart) }
+  let(:user) { cart.user }
+  let(:another_cart) { FactoryBot.create(:cart) }
+  let(:another_user) { another_cart.user }  
+
+  context 'ユーザー情報を編集できる場合' do
+    it '管理者ユーザーでログイン状態ならユーザー情報を編集できる' do
+      # ログインする
+      sign_in(admin)
+      # そのユーザーのマイページに移動する
+      visit user_path(user)
+      # ユーザー情報変更ページへ遷移するボタンがあることを確認する
+      expect(page).to have_content("登録情報の変更")
+      # ユーザー情報編集ページに移動する
+      visit edit_user_path(user)
+      # すでに登録済みのユーザー情報が入っていることを確認する
+      expect(
+        find('#user_name').value
+      ).to eq(user.name)
+      expect(
+        find('#user_kana_name').value
+      ).to eq(user.kana_name)
+      expect(
+        find('#user_email').value
+      ).to eq(user.email)
+      # 登録情報を編集する
+      fill_in '名前', with: "#{user.name}編集した名前"
+      # 編集してもUserモデルのカウントが変わらないことを確認する
+      expect {
+        find('input[name="commit"]').click
+      }.to change { User.count }.by(0)
+      # マイページに遷移することを確認する
+      expect(current_path).to eq(user_path(user))
+      # マイページに先ほど編集したユーザー情報が表示されていることを確認する
+      expect(page).to have_content(user.name)
+    end
+    it '一般ユーザーでログイン状態なら自身のユーザー情報を編集できる' do
+      # ログインする
+      sign_in(user)
+      # マイページに移動する
+      visit user_path(user)
+      # ユーザー情報変更ページへ遷移するボタンがあることを確認する
+      expect(page).to have_content("登録情報の変更")
+      # ユーザー情報編集ページに移動する
+      visit edit_user_path(user)
+      # すでに登録済みのユーザー情報が入っていることを確認する
+      expect(
+        find('#user_name').value
+      ).to eq(user.name)
+      expect(
+        find('#user_kana_name').value
+      ).to eq(user.kana_name)
+      expect(
+        find('#user_email').value
+      ).to eq(user.email)
+      # 登録情報を編集する
+      fill_in '名前', with: "#{user.name}編集した名前"
+      # 編集してもUserモデルのカウントが変わらないことを確認する
+      expect {
+        find('input[name="commit"]').click
+      }.to change { User.count }.by(0)
+      # マイページに遷移することを確認する
+      expect(current_path).to eq(user_path(user))
+      # マイページに先ほど編集したユーザー情報が表示されていることを確認する
+      expect(page).to have_content(user.name)
+    end
+  end
+  context 'ユーザー情報を編集できない場合' do
+    it '一般ユーザーでログイン状態でも他のユーザーの情報を編集できない' do
+      # ログインする
+      sign_in(another_user)
+      # マイページに移動する
+      visit user_path(user)
+      # トップページに遷移していることを確認する
+      expect(current_path).to eq(root_path)
+    end
+    it 'ログアウト状態ではユーザー情報の編集はできない' do
+       # マイページに移動する
+       visit user_path(user)
+       # トップページに遷移していることを確認する
+       expect(current_path).to eq(new_user_session_path)
+    end
+  end
+end
