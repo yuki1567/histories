@@ -6,7 +6,7 @@ class BorrowsController < ApplicationController
 
   def index
     @borrows = @user.borrows
-    @borrow_books = BorrowBook.where(borrow_id: @borrows).order("created_at DESC")
+    @borrow_books = BorrowBook.where(borrow_id: @borrows).order('created_at DESC')
   end
 
   def new

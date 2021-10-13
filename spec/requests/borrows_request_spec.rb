@@ -6,17 +6,18 @@ RSpec.describe 'Borrows', type: :request do
   let(:user) { cart_book.cart.user }
   let(:book) { FactoryBot.create(:book, quantity: 1) }
   let(:borrow_params) do
-    { borrow_address: { postal_code: "123-4567", prefecture_id: "1", city: "test", street_address: "test", detail_address: "test", phone_number: "09012345678", book_ids: [book.id] } }
+    { borrow_address: { postal_code: '123-4567', prefecture_id: '1', city: 'test', street_address: 'test',
+                        detail_address: 'test', phone_number: '09012345678', book_ids: [book.id] } }
   end
   let(:invalid_borrow_params) do
-    { borrow_address: { postal_code: "" } }
+    { borrow_address: { postal_code: '' } }
   end
   let(:admin) { FactoryBot.create(:user, :a) }
-  let!(:borrow_book) {FactoryBot.create(:borrow_book) }
+  let!(:borrow_book) { FactoryBot.create(:borrow_book) }
   let(:borrow) { borrow_book.borrow }
   let(:borrow_user) { borrow_book.borrow.user }
   let!(:borrow_user_cart) { FactoryBot.create(:cart, user_id: borrow_user.id) }
-  
+
   describe 'GET #new' do
     context 'ログイン状態の場合' do
       before do
@@ -33,7 +34,7 @@ RSpec.describe 'Borrows', type: :request do
       end
       it 'newアクションにリクエストするとレスポンスに配送先入力フォームが存在する' do
         get new_user_borrow_path(user)
-        expect(response.body).to include("本を借りる")
+        expect(response.body).to include('本を借りる')
       end
     end
 
@@ -54,9 +55,9 @@ RSpec.describe 'Borrows', type: :request do
       sign_in(user)
     end
 
-    context '保存に成功した場合'do
+    context '保存に成功した場合' do
       it 'createアクションにレスポンスすると正常にレスポンスが返ってきている' do
-        post user_borrows_path(user), params: borrow_params 
+        post user_borrows_path(user), params: borrow_params
         expect(response.status).to eq 302
       end
       it 'Borrowsテーブルに保存ができた' do
@@ -83,7 +84,7 @@ RSpec.describe 'Borrows', type: :request do
     end
     context '保存に失敗した場合' do
       it 'createアクションにレスポンスすると正常にレスポンスが返ってきていない' do
-        post user_borrows_path(user), params: invalid_borrow_params 
+        post user_borrows_path(user), params: invalid_borrow_params
         expect(response.status).not_to eq 302
       end
       it 'Borrowsテーブルに保存ができていない' do
@@ -101,7 +102,7 @@ RSpec.describe 'Borrows', type: :request do
       end
       it 'エラーメッセージが表示されている' do
         post user_borrows_path(user), params: invalid_borrow_params
-        expect(response.body).to include("error-message")
+        expect(response.body).to include('error-message')
       end
     end
   end
@@ -188,7 +189,7 @@ RSpec.describe 'Borrows', type: :request do
       end
       it 'ログインページに遷移すること' do
         get user_borrows_path(borrow_user)
-        expect(response).to redirect_to new_user_session_path 
+        expect(response).to redirect_to new_user_session_path
       end
     end
   end
