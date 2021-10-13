@@ -6,6 +6,12 @@ RSpec.describe 'Users', type: :request do
   let(:user) { cart.user }
   let(:borrow) { FactoryBot.create(:borrow, user_id: user.id) }
   let!(:borrow_book) { FactoryBot.create(:borrow_book, borrow_id: borrow.id) }
+  let(:user_params) do
+    { user: { name: "山田" } }
+  end
+  let(:invalid_user_params) do
+    { user: { name: "" } }
+  end
 
   describe 'GET #index' do
     context '管理者ユーザでログイン状態の場合' do
@@ -151,6 +157,87 @@ RSpec.describe 'Users', type: :request do
       it 'ログインページに遷移している' do
         get user_path(user)
         expect(response).to redirect_to new_user_session_path
+      end
+    end
+  end
+
+  describe 'GET #edit' do
+    context '管理者ユーザーでログイン状態の場合' do
+      before do
+        sign_in(admin)
+      end
+      
+      it 'editアクションにリクエストすると正常にレスポンスが返ってくる' do
+        get edit_user_path(user)
+        expect(response.status).to eq 200
+      end
+      it 'editアクションにリクエストするとレスポンスに本編集フォームが存在する' do
+        get edit_user_path(user)
+        expect(response.body).to include('変更')
+      end
+    end
+    context '一般ユーザーでログイン状態の場合' do
+      before do
+        sign_in(user)
+      end
+      it 'editアクションにリクエストすると正常にレスポンスが返ってきている' do
+        get edit_user_path(user)
+        expect(response.status).to eq 200
+      end
+      it 'editアクションにリクエストするとレスポンスに本編集フォームが存在する' do
+        get edit_user_path(user)
+        expect(response.body).to include('変更')
+      end
+    end
+    context 'ログアウト状態の場合' do
+      it 'editアクションにリクエストすると正常にレスポンスが返ってきていない' do
+        get edit_user_path(user)
+        expect(response.status).not_to eq 200
+      end
+      it 'トップページに遷移すること' do
+        get edit_user_path(user)
+        expect(response).to redirect_to new_user_session_path
+      end
+    end
+  end
+
+  describe 'PUT #update' do
+    before do
+      sign_in(user)
+    end
+
+    context '保存に成功した場合' do
+      it 'updateアクションにレスポンスすると正常にレスポンスが返ってきている' do
+        put user_path(user), params: user_params
+        expect(response.status).to eq 302
+      end
+      it 'データベースが更新している' do
+        put user_path(user), params: user_params
+        expect(user.reload.name).to eq('山田')
+      end
+      it 'Booksテーブルが増減していない' do
+        expect { put user_path(user), params: user_params }.not_to change(User, :count)
+      end
+      it 'マイページに遷移すること' do
+        put user_path(user), params: user_params
+        expect(response).to redirect_to user_path(user)
+      end
+    end
+    context '保存に失敗した場合' do
+      it 'updateアクションにレスポンスすると正常にレスポンスが返ってきていない' do
+        put user_path(user), params: invalid_user_params
+        expect(response.status).not_to eq 302
+      end
+      it 'データベースが更新していない' do
+        put user_path(user), params: invalid_user_params
+        expect(user.reload.name).not_to eq('山田')
+      end
+      it 'Booksテーブルが増減していない' do
+        expect { put user_path(user), params: invalid_user_params }.not_to change(User, :count)
+      end
+      it 'エラーメッセージが表示されていること' do
+        put user_path(user), params: invalid_user_params
+        expect(response.body).to include("error-message")
       end
     end
   end

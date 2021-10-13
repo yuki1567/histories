@@ -273,7 +273,7 @@ RSpec.describe 'Books', type: :request do
         expect(response.status).to eq 200
       end
       it 'editアクションにリクエストするとレスポンスに本編集フォームが存在する' do
-        get new_book_path(book)
+        get edit_book_path(book)
         expect(response.body).to include('登録')
       end
     end
