@@ -123,3 +123,45 @@ RSpec.describe 'ログイン', type: :system do
     end
   end
 end
+
+RSpec.describe 'ユーザー一覧', type: :system do
+  let(:admin) { FactoryBot.create(:user, :a) }
+  let(:cart) { FactoryBot.create(:cart) }
+  let!(:user) { cart.user }
+
+  context 'ユーザー一覧が見られる場合' do
+    it '管理者ユーザーでログイン状態ならばユーザー一覧が見られる' do
+      # ログインする
+      sign_in(admin)
+      # トップページに移動する
+      visit root_path
+      # ユーザー一覧のリンクを押す
+      click_on("ユーザー一覧")
+      # ユーザー一覧ページに遷移していることを確認する
+      expect(current_path).to eq(users_path)
+      # ユーザー情報が表示されていることを確認する
+      expect(page).to have_content(user.name)
+      expect(page).to have_content(user.kana_name)
+      expect(page).to have_content(user.email)
+      # 編集、削除ボタンが表示されていることを確認する
+      expect(page).to have_content("編集")
+      expect(page).to have_content("削除")
+    end
+  end
+  context 'ユーザー一覧が見られない場合' do
+    it '一般ユーザーでログイン状態ではユーザー一覧が見られない' do
+      # ログインする
+      sign_in(user)
+      # ユーザー一覧ページに移動する
+      visit users_path
+      # トップページに遷移していることを確認する
+      expect(current_path).to eq(root_path)
+    end
+    it 'ログアウト状態ではユーザー一覧が見られない' do
+      # ユーザー一覧ページに移動する
+      visit users_path
+      # トップページに遷移していることを確認する
+      expect(current_path).to eq(root_path)
+    end
+  end
+end
