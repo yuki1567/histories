@@ -1,0 +1,24 @@
+ja:
+  activerecord:
+    attributes:
+      user:
+        name: 名前
+        kana_name: フリガナ
+      book:
+        image: 画像
+        title: タイトル
+        author: 作者
+        content: 説明
+        quantity: 在庫
+        category_id: カテゴリー
+      cart:
+        quantity: カート
+  activemodel:
+    attributes:
+      borrow_address:
+        postal_code: 郵便番号
+        prefecture_id: 都道府県
+        city: 市町村
+        street_address: 番地
+        detail_address: 建物名
+        phone_number: 電話番号

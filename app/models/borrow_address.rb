@@ -5,12 +5,12 @@ class BorrowAddress
 
   with_options presence: true do
     validates :user_id
-    validates :postal_code, format: { with: /\A[0-9]{3}-[0-9]{4}\z/, message: 'is invalid. Enter it as follows (e.g. 123-4567)' }
+    validates :postal_code, format: { with: /\A[0-9]{3}-[0-9]{4}\z/, message: 'が無効です。例のように入力してください' }
     validates :prefecture_id
     validates :city
     validates :street_address
-    validates :phone_number, length: { minimum: 10, maximum: 11, message: 'is too short' },
-                             format: { with: /\A[0-9]+\z/, message: 'is invalid. Input only number' }
+    validates :phone_number, length: { minimum: 10, maximum: 11, message: 'が短いです' },
+                             format: { with: /\A[0-9]+\z/, message: 'が無効です。半角数字で入力してください' }
   end
 
   def save

@@ -27,57 +27,57 @@ RSpec.describe BorrowAddress, type: :model do
       it 'postal_codeが空では借りられない' do
         borrow_address.postal_code = ''
         borrow_address.valid?
-        expect(borrow_address.errors.full_messages).to include("Postal code can't be blank")
+        expect(borrow_address.errors.full_messages).to include("郵便番号を入力してください")
       end
       it 'postal_codeが３桁ハイフン４桁以外では借りられない' do
         borrow_address.postal_code = 'aaa-aaaa'
         borrow_address.valid?
-        expect(borrow_address.errors.full_messages).to include('Postal code is invalid. Enter it as follows (e.g. 123-4567)')
+        expect(borrow_address.errors.full_messages).to include('郵便番号が無効です。例のように入力してください')
       end
       it 'postal_codeが半角文字列以外では借りられない' do
         borrow_address.postal_code = 'ああああああああ'
         borrow_address.valid?
-        expect(borrow_address.errors.full_messages).to include('Postal code is invalid. Enter it as follows (e.g. 123-4567)')
+        expect(borrow_address.errors.full_messages).to include('郵便番号が無効です。例のように入力してください')
       end
       it 'prefecture_idが空では借りられない' do
         borrow_address.prefecture_id = ''
         borrow_address.valid?
-        expect(borrow_address.errors.full_messages).to include("Prefecture can't be blank")
+        expect(borrow_address.errors.full_messages).to include("都道府県を入力してください")
       end
       it 'cityが空では借りられない' do
         borrow_address.city = ''
         borrow_address.valid?
-        expect(borrow_address.errors.full_messages).to include("City can't be blank")
+        expect(borrow_address.errors.full_messages).to include("市町村を入力してください")
       end
       it 'street_addressが空では借りられない' do
         borrow_address.street_address = ''
         borrow_address.valid?
-        expect(borrow_address.errors.full_messages).to include("Street address can't be blank")
+        expect(borrow_address.errors.full_messages).to include("番地を入力してください")
       end
       it 'telephoneが空では借りられない' do
         borrow_address.phone_number = ''
         borrow_address.valid?
-        expect(borrow_address.errors.full_messages).to include("Phone number can't be blank")
+        expect(borrow_address.errors.full_messages).to include("電話番号を入力してください")
       end
       it 'telephoneが半角数値以外では借りられない' do
         borrow_address.phone_number = 'abcdefghijk'
         borrow_address.valid?
-        expect(borrow_address.errors.full_messages).to include('Phone number is invalid. Input only number')
+        expect(borrow_address.errors.full_messages).to include('電話番号が無効です。半角数字で入力してください')
       end
       it 'telephoneが9桁以下では借りられない' do
         borrow_address.phone_number = '123456789'
         borrow_address.valid?
-        expect(borrow_address.errors.full_messages).to include('Phone number is too short')
+        expect(borrow_address.errors.full_messages).to include('電話番号が短いです')
       end
       it 'telephoneが12桁以上では借りられない' do
         borrow_address.phone_number = '090123456789'
         borrow_address.valid?
-        expect(borrow_address.errors.full_messages).to include('Phone number is too short')
+        expect(borrow_address.errors.full_messages).to include('電話番号が短いです')
       end
       it 'userが紐付いていないと借りられない' do
         borrow_address.user_id = nil
         borrow_address.valid?
-        expect(borrow_address.errors.full_messages).to include("User can't be blank")
+        expect(borrow_address.errors.full_messages).to include("Userを入力してください")
       end
     end
   end

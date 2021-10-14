@@ -13,7 +13,7 @@ class Book < ApplicationRecord
     validates :content
     validates :category_id
     with_options numericality: { only_integer: true, greater_than_or_equal_to: 0,
-                                 message: 'is invalid. Input half-width numbers' } do
+                                 message: 'が無効です。半角数字で入力してください' } do
       validates :quantity
     end
   end

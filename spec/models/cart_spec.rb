@@ -15,13 +15,13 @@ RSpec.describe Cart, type: :model do
       it 'quantityが11以上になるならカートに本の追加ができない' do
         cart.quantity = 11
         cart.valid?
-        expect(cart.errors.full_messages).to include('Quantity is full')
+        expect(cart.errors.full_messages).to include('カートの中に入れられる本は１０冊までです')
       end
 
       it 'userが紐付いていないとカートに本の追加ができない' do
         cart.user = nil
         cart.valid?
-        expect(cart.errors.full_messages).to include('User must exist')
+        expect(cart.errors.full_messages).to include('Userを入力してください')
       end
     end
   end
