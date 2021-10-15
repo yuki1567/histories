@@ -128,6 +128,7 @@ RSpec.describe 'ユーザー一覧', type: :system do
   let(:admin) { FactoryBot.create(:user, :a) }
   let(:cart) { FactoryBot.create(:cart) }
   let!(:user) { cart.user }
+  let!(:borrow) { FactoryBot.create(:borrow, user_id: user.id) }
 
   context 'ユーザー一覧が見られる場合' do
     it '管理者ユーザーでログイン状態ならユーザー一覧が見られる' do
@@ -143,9 +144,11 @@ RSpec.describe 'ユーザー一覧', type: :system do
       expect(page).to have_content(user.name)
       expect(page).to have_content(user.kana_name)
       expect(page).to have_content(user.email)
+      expect(page).to have_content("貸し出し中")
       # 編集、削除ボタンが表示されていることを確認する
-      expect(page).to have_content("編集")
-      expect(page).to have_content("削除")
+      expect(page).to have_selector(".bi-search")
+      expect(page).to have_selector(".bi-pencil")
+      expect(page).to have_selector(".bi-trash")
     end
   end
   context 'ユーザー一覧が見られない場合' do
@@ -331,11 +334,14 @@ RSpec.describe 'ユーザーの削除', type: :system do
       # ユーザー一覧ページに移動する
       visit users_path
       # 削除ボタンがあることを確認する
-      expect(page).to have_content("削除")
+      expect(page).to have_selector(".bi-trash")
       # 削除ボタンを押すとUserモデルのカウントがい減ることを確認する
-      expect {
-        click_on("削除")
-      }.to change { User.count}.by(-1)
+      find(".bi-trash").click
+      page.driver.browser.switch_to.alert.accept do
+        expect {
+          find("OK").click
+        }.to change { User.count }.by(-1)
+      end
       # ユーザー一覧ページに遷移したことを確認する
       expect(current_path).to eq(users_path)
       # ユーザー一覧ページに削除したユーザーの情報が存在しないことを確認する

@@ -83,6 +83,14 @@ RSpec.describe 'Carts', type: :request do
         get user_cart_path(user, cart)
         expect(response.body).to include(cart_book.book.category.name)
       end
+      it 'showアクションにリクエストするとレスポンスに詳細ボタンが存在する' do
+        get user_cart_path(user, cart)
+        expect(response.body).to include("詳細")
+      end
+      it 'showアクションにリクエストするとレスポンスに削除ボタンが存在する' do
+        get user_cart_path(user, cart)
+        expect(response.body).to include("削除")
+      end
     end
 
     context 'ログイン状態で他のユーザーのカートページに遷移しようとした場合' do

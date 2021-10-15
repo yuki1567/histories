@@ -113,6 +113,18 @@ RSpec.describe 'Books', type: :request do
         get root_path
         expect(response.body).to include('検索')
       end
+      it 'indexアクションにリクエストするとレスポンスに詳細ボタンが存在する' do
+        get root_path
+        expect(response.body).to include('bi-search')
+      end
+      it 'indexアクションにリクエストするとレスポンスに編集ボタンが存在する' do
+        get root_path
+        expect(response.body).to include('bi-pencil')
+      end
+      it 'indexアクションにリクエストするとレスポンスに削除ボタンが存在する' do
+        get root_path
+        expect(response.body).to include('bi-trash')
+      end
     end
     context '一般ユーザーでログインの場合' do
       before do
@@ -205,6 +217,14 @@ RSpec.describe 'Books', type: :request do
         get book_path(book)
         expect(response.body).to include(book.quantity.to_s)
       end
+      it 'showアクションにリクエストするとレスポンスに編集ボタンが存在する' do
+        get book_path(book)
+        expect(response.body).to include('編集')
+      end
+      it 'showアクションにリクエストするとレスポンスに削除ボタンが存在する' do
+        get book_path(book)
+        expect(response.body).to include('削除')
+      end
     end
     context '一般ユーザーでログインした場合' do
       before do
@@ -234,6 +254,10 @@ RSpec.describe 'Books', type: :request do
         get book_path(book)
         expect(response.body).to include(book.category.name)
       end
+      it 'showアクションにリクエストするとレスポンスにカートボタンが存在する' do
+        get book_path(book)
+        expect(response.body).to include("カートに入れる")
+      end
     end
     context 'ログアウト状態の場合' do
       it 'showアクションにリクエストすると正常にレスポンスが返ってくる' do
@@ -259,6 +283,10 @@ RSpec.describe 'Books', type: :request do
       it 'showアクションにリクエストするとレスポンスに登録済みの本のカテゴリーが存在する' do
         get book_path(book)
         expect(response.body).to include(book.category.name)
+      end
+      it 'showアクションにリクエストするとレスポンスにカートボタンが存在する' do
+        get book_path(book)
+        expect(response.body).to include("カートに入れる")
       end
     end
   end

@@ -38,13 +38,17 @@ RSpec.describe 'Users', type: :request do
         get users_path
         expect(response.body).to include("貸し出し中")
       end
+      it 'indexアクションにリクエストするとレスポンスに詳細ボタンが存在する' do
+        get users_path
+        expect(response.body).to include('bi-search')
+      end
       it 'indexアクションにリクエストするとレスポンスに編集ボタンが存在する' do
         get users_path
-        expect(response.body).to include('編集')
+        expect(response.body).to include('bi-pencil')
       end
       it 'indexアクションにリクエストするとレスポンスに削除ボタンが存在する' do
         get users_path
-        expect(response.body).to include('削除')
+        expect(response.body).to include('bi-trash')
       end
     end
     context '一般ユーザーでログイン状態の場合' do
@@ -94,6 +98,18 @@ RSpec.describe 'Users', type: :request do
         get user_path(user)
         expect(response.body).to include(user.email)
       end
+      it 'showアクションにリクエストするとレスポンスに登録情報の編集ボタンが存在する' do
+        get user_path(user)
+        expect(response.body).to include('登録情報の変更')
+      end
+      it 'showアクションにリクエストするとレスポンスに借りた本の履歴ボタンが存在する' do
+        get user_path(user)
+        expect(response.body).to include('借りた本の履歴')
+      end
+      it 'showアクションにリクエストするとレスポンスに返却確認済みボタンが存在する' do
+        get user_path(user)
+        expect(response.body).to include('返却確認済み')
+      end
       it 'showアクションにリクエストするとレスポンスに現在借りている本の画像が存在する' do
         get user_path(user)
         expect(response.body).to include('card-img-left')
@@ -131,6 +147,14 @@ RSpec.describe 'Users', type: :request do
       it 'showアクションにリクエストするとレスポンスに登録済みのユーザーのメールアドレスが存在する' do
         get user_path(user)
         expect(response.body).to include(user.email)
+      end
+      it 'showアクションにリクエストするとレスポンスに登録情報の編集ボタンが存在する' do
+        get user_path(user)
+        expect(response.body).to include('登録情報の変更')
+      end
+      it 'showアクションにリクエストするとレスポンスに借りた本の履歴ボタンが存在する' do
+        get user_path(user)
+        expect(response.body).to include('借りた本の履歴')
       end
       it 'showアクションにリクエストするとレスポンスに現在借りている本の画像が存在する' do
         get user_path(user)

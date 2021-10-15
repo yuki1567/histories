@@ -45,7 +45,7 @@ RSpec.describe 'UsersRegistration', type: :request do
       end
       it 'エラーメッセージが表示されている' do
         post user_registration_path, params: invalid_user_params
-        expect(response.body).to include('error_explanation')
+        expect(response.body).to include('error-message')
       end
     end
   end

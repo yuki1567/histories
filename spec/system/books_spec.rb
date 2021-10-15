@@ -90,8 +90,9 @@ RSpec.describe '本の一覧', type: :system do
     expect(page).to have_content('ユーザー一覧')
     expect(page).to have_content('ログアウト')
     # 本の編集ページに遷移するボタンや削除ボタン
-    expect(page).to have_content('編集')
-    expect(page).to have_content('削除')
+    expect(page).to have_selector(".bi-search")
+    expect(page).to have_selector(".bi-pencil")
+    expect(page).to have_selector(".bi-trash")
   end
   it '一般ユーザーでログインした場合はマイページとログアウトリンクが表示されている' do
     # ログインする
@@ -102,7 +103,6 @@ RSpec.describe '本の一覧', type: :system do
     expect(page).to have_selector('img')
     expect(page).to have_content(book.title)
     expect(page).to have_content(book.author)
-    expect(page).to have_selector('.category-name')
     # カートボタンが表示されている
     expect(page).to have_selector('.bi-cart-fill')
     # マイページ、ログアウトのリンクが表示されている
@@ -116,7 +116,6 @@ RSpec.describe '本の一覧', type: :system do
     expect(page).to have_selector('img')
     expect(page).to have_content(book.title)
     expect(page).to have_content(book.author)
-    expect(page).to have_selector('.category-name')
     # カートボタンが表示されている
     expect(page).to have_selector('.bi-cart-fill')
     # ログイン、新規登録のリンクが表示されている
@@ -190,7 +189,7 @@ RSpec.describe '本の編集', type: :system do
       # ログインする
       sign_in(admin)
       # 本編集ページへ遷移するボタンがあることを確認する
-      expect(page).to have_content('編集')
+      expect(page).to have_selector(".bi-pencil")
       # 本編集ページに移動する
       visit edit_book_path(book)
       # 既に登録済みの本の情報が入っていることを確認する
@@ -226,7 +225,7 @@ RSpec.describe '本の編集', type: :system do
       # ログインする
       sign_in(admin)
       # 本編集ページへ遷移するボタンがあることを確認する
-      expect(page).to have_content('編集')
+      expect(page).to have_selector(".bi-pencil")
       # 本編集ページに移動する
       visit edit_book_path(book)
       # 既に登録済みの本の情報が入っていることを確認する
@@ -280,11 +279,14 @@ RSpec.describe '本の削除', type: :system do
       # ログインする
       sign_in(admin)
       # トップ画面に本の削除のボタンがあることを確認する
-      expect(page).to have_content('削除')
+      expect(page).to have_selector('.bi-trash')
       # 本を削除するとレコードの数が１減ることを確認する
-      expect do
-        click_link '削除'
-      end.to change { Book.count }.by(-1)
+      find(".bi-trash").click
+      page.driver.browser.switch_to.alert.accept do
+        expect {
+          find("OK").click
+        }.to change { Book.count }.by(-1)
+      end
       # トップ画面に遷移したことを確認する
       expect(current_path).to eq(root_path)
       # トップページに削除した本の情報が存在しないことを確認する
