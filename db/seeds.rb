@@ -6,15 +6,3 @@ User.create!(
   password_confirmation: "123456",
   admin: true
 )
-30.times do |n|
-  book = Book.new(
-    title: "test#{n}",
-    author: "test#{n}",
-    content: "test#{n}",
-    quantity: "3",
-    category_id: 1
-  )
-  book.image.attach(io: File.open(Rails.root.join("app/assets/images/test_image.png")),
-                    filename: "test_image.png")
-  book.save!
-end
