@@ -2,31 +2,37 @@
 <% if user_signed_in? && current_user.admin? %>
   <main>
     <div class="container">
-      <div class="table-responsive-md my-5">
-        <table class="table table-striped table-hover">
+      <div class="table-responsive my-5">
+        <table class="table table-striped text-nowrap">
           <thead>
             <tr>
-              <th>タイトル</th>
-              <th>作者</th>
-              <th>カテゴリー</th>
-              <th>在庫数</th>
-              <th></th>
-              <th></th>
+              <th scope="col"></th>
+              <th scope="col">タイトル</th>
+              <th scope="col">作者</th>
+              <th scope="col">カテゴリー</th>
+              <th scope="col">在庫数</th>
+              <th scope="col"></th>
             </tr>
           </thead>
           <tbody>
             <% @books.each do |book| %>
-              <tr onclick='window.location="<%= '/books/' + book.id.to_s %>"' role="link">
-                <th ><%= book.title %></th>
-                <th><%= book.author %></th>
-                <th class="category-name"><%= book.category.name %></th>
+              <tr>
+                <td scope="col"><%= book.id %></td>
+                <td><%= book.title %></p></td>
+                <td><%= book.author %></td>
+                <td class="category-name"><%= book.category.name %></td>
                 <% if book.quantity == 0 %>
-                  <th>貸し出し中</th>
+                  <td>貸し出し中</td>
                 <% else %>
-                  <th><%= book.quantity %>冊</th>
+                  <td><%= book.quantity %>冊</td>
                 <% end %>
-                <th><%= link_to "編集", edit_book_path(book), class: "btn btn-warning" %></th> 
-                <th><%= link_to "削除", book_path(book), method: :delete, class: "btn btn-danger" %></th>
+                <td>
+                  <div class="d-flex">
+                    <%= link_to "", book_path(book), class: "btn btn-success bi bi-search" %> 
+                    <%= link_to "", edit_book_path(book), class: "btn btn-warning bi bi-pencil" %>
+                    <%= link_to "", book_path(book), method: :delete, data: { confirm: "本当に削除して良いですか？" }, class: "btn btn-danger bi bi-trash" %>
+                  </div>
+                </td>
               </tr>
             <% end %>
           </tbody>
@@ -38,21 +44,22 @@
   <main>
     <%= image_tag 'bookers.png', width: '100%', height: '400' %>
     <div class="container">
-      <div class="books row row-cols-2 row-cols-sm-2 row-cols-md-3 my-5 g-3">
+      <div class="books row row-cols-1 row-cols-md-3 row-cols-xl-5 my-5 g-3">
         <% @books.each do |book| %>
-          <div class="book col">
-            <div class="card">
+          <div class="book d-flex justify-content-center">
+            <div class="card index-card">
+              <div class="row g-0">  
               <%= link_to book_path(book), class: "text-decoration-none text-dark" do %>
-                <%= image_tag book.image.variant(resize: "500x500"), class: "card-img-top" %>
+                <%= image_tag book.image, class: "card-img-top col-sm-5" %>
                 <div class="card-body">
-                  <h5 class="card-title"><%= book.title %></h5>
-                  <p class="card-text"><%= book.author %><p>
-                  <p class="card-text category-name"><%= book.category.name %></p>
+                  <h5 class="card-title text-truncate"><%= book.title %></h5>
+                  <p class="card-text text-truncate" style="max-width: 300px;"><%= book.author %><p>
                   <% if book.quantity == 0 %>
                     <b class="text-danger">貸し出し中</b>
                   <% end %>
-                </div>
+                </div>   
               <% end %>
+              </div>
             </div>
           </div>
         <% end %>

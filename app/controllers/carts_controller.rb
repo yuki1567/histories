@@ -11,7 +11,7 @@ class CartsController < ApplicationController
     book = Book.find(params[:book_id])
     if current_user.cart.cart_books.where(book_id: book.id).present?
       @book = Book.find(params[:book_id])
-      flash.now[:danger] = 'すでに同じ本がカートの中に入っています'
+      flash.now[:danger] = '⚠️同じ本がすでにカートの中にあります'
       render template: 'books/show'
     else
       cart = current_user.cart

@@ -5,21 +5,23 @@
     <div class="books row row-cols-1 my-5 g-3 ">
       <% if @borrow_books.present? %>
         <% @borrow_books.each do |borrow_book| %>
-          <div class="book col">
-            <div class="card">
-              <div class="row">
-                <div class="col-md-5"> 
-                  <%= image_tag borrow_book.book.image.variant(resize: "500x500"), class: "card-img-left col-md-6 h-100" %>
-                </div>
-                <div class="col-md-7">
-                  <div class="card-body">
-                    <h5 class="card-title"><%= borrow_book.book.title %></h5>
-                    <p class="card-text"><%= borrow_book.book.author %><p>
-                    <p class="card-text category-name"><%= borrow_book.book.category.name %></p>
+          <div class="book">
+            <%= link_to book_path(borrow_book.book), class: "text-decoration-none text-dark" do %>
+              <div class="card">
+                <div class="row">
+                  <div class="col-5"> 
+                    <%= image_tag borrow_book.book.image, class: "card-img-left col-6 img-fluid" %>
+                  </div>
+                  <div class="col-7">
+                    <div class="card-body">
+                      <h5 class="card-title text-truncate"><%= borrow_book.book.title %></h5>
+                      <p class="card-text text-truncate"><%= borrow_book.book.author %><p>
+                      <p class="card-text category-name"><%= borrow_book.book.category.name %></p>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+            <% end %>
           </div>
         <% end %>
       <% else %>
