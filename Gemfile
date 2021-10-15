@@ -67,3 +67,5 @@ gem 'image_processing', '~> 1.2'
 gem 'active_hash'
 
 gem 'rails-i18n'
+
+gem 'data-confirm-modal'
