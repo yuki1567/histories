@@ -1,0 +1,73 @@
+<%= render "shared/header" %>
+<% if user_signed_in? && current_user.admin? %>
+  <main>
+    <div class="container">
+      <div class="table-responsive my-5">
+        <table class="table table-striped text-nowrap">
+          <thead>
+            <tr>
+              <th scope="col"></th>
+              <th scope="col">タイトル</th>
+              <th scope="col">作者</th>
+              <th scope="col">カテゴリー</th>
+              <th scope="col">在庫数</th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @books.each do |book| %>
+              <tr>
+                <td scope="col"><%= book.id %></td>
+                <td><%= book.title %></p></td>
+                <td><%= book.author %></td>
+                <td class="category-name"><%= book.category.name %></td>
+                <% if book.quantity == 0 %>
+                  <td>貸し出し中</td>
+                <% else %>
+                  <td><%= book.quantity %>冊</td>
+                <% end %>
+                <td>
+                  <div class="d-flex">
+                    <%= link_to "", book_path(book), class: "btn btn-success bi bi-search" %> 
+                    <%= link_to "", edit_book_path(book), class: "btn btn-warning bi bi-pencil" %>
+                    <%= link_to "", book_path(book), method: :delete, data: { confirm: "本当に削除して良いですか？" }, class: "btn btn-danger bi bi-trash" %>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+<% else %>
+  <main>
+    <div class="container">
+      <% if @books.present? %>
+        <div class="books row row-cols-1 row-cols-md-3 row-cols-xl-5 my-5 g-3">
+          <% @books.each do |book| %>
+            <div class="book d-flex justify-content-center">
+              <div class="card index-card">
+                <div class="row g-0">  
+                <%= link_to book_path(book), class: "text-decoration-none text-dark" do %>
+                  <%= image_tag book.image, class: "card-img-top col-sm-5" %>
+                  <div class="card-body">
+                    <h5 class="card-title text-truncate"><%= book.title %></h5>
+                    <p class="card-text text-truncate" style="max-width: 300px;"><%= book.author %><p>
+                    <% if book.quantity == 0 %>
+                      <b class="text-danger">貸し出し中</b>
+                    <% end %>
+                  </div>
+                <% end %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <h2 class="text-center mt-5 pt-5">検索に該当する商品はありません</h2>
+      <% end %>
+    </div>
+  </main>
+<% end %>
+<%= render "shared/footer" %>

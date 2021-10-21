@@ -4,7 +4,11 @@ Rails.application.routes.draw do
     sessions: 'users/sessions' 
   }
   root to: 'books#index'
-  resources :books
+  resources :books do
+    collection do
+      get 'search'
+    end
+  end
   resources :users, only: [:index, :show, :edit, :update, :destroy] do
     resources :carts, only: [:show, :create, :destroy]
     resources :borrows, only: [:index, :new, :create, :update]

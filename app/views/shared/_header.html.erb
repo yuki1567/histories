@@ -44,10 +44,10 @@
             </li>   
           <% end %>
         </ul>
-        <form class="d-flex">
-          <input class="form-control me-2" type="search" aria-label="Search">
-          <button class="btn btn-warning col-3" type="submit">検索</button>
-        </form>
+        <%= form_with url: search_books_path, local:true, method: :get, class: "d-flex" do |f| %>
+          <%= f.text_field :keyword, class: "form-control me-2" %>
+          <%= f.submit "検索", class: "btn btn-warning col-3"%>
+        <% end %>
         <% if user_signed_in? && current_user.admin? %>
         <% elsif user_signed_in? %>  
           <%= link_to "", user_cart_path(current_user, current_user.cart), class: "bi bi-cart-fill text-dark", style: "font-size: 2rem;", id: "cart-btn" %>

@@ -44,6 +44,10 @@ class BooksController < ApplicationController
     redirect_to root_path
   end
 
+  def search
+    @books = SearchBooksService.search(params[:keyword])
+  end
+
   private
 
   def book_params
