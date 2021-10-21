@@ -1,22 +1,20 @@
 class CartsController < ApplicationController
   before_action :authenticate_user!, only: [:show, :create, :destroy]
-  before_action :set_cart, only: [:show, :destroy]
+  before_action :set_cart_books, only: [:show, :create, :destroy]
   before_action :move_to_index, only: [:show, :destroy]
 
   def show
-    @cart_books = @cart.cart_books.includes(:cart)
   end
 
   def create
     book = Book.find(params[:book_id])
-    if current_user.cart.cart_books.where(book_id: book.id).present?
+    if @cart_books.where(book_id: book.id).present?
       @book = Book.find(params[:book_id])
       flash.now[:danger] = '⚠️同じ本がすでにカートの中にあります'
       render template: 'books/show'
     else
-      cart = current_user.cart
-      cart.quantity += params[:quantity].to_i
-      if cart.save
+      @cart.quantity += params[:quantity].to_i
+      if @cart.save
         CartBook.create(cart_book_params)
         redirect_to root_path
       else
@@ -27,7 +25,7 @@ class CartsController < ApplicationController
   end
 
   def destroy
-    cart_book = @cart.cart_books.find_by(book_id: params[:book_id])
+    cart_book = @cart_books.find_by(book_id: params[:book_id])
     cart_book.destroy
     @cart.increment!(:quantity, -1)
     redirect_to user_cart_path(current_user, @cart)
@@ -39,8 +37,9 @@ class CartsController < ApplicationController
     params.permit(:book_id).merge(cart_id: current_user.cart.id)
   end
 
-  def set_cart
-    @cart = Cart.find(params[:id])
+  def set_cart_books
+    @cart = current_user.cart
+    @cart_books = @cart.cart_books.includes(:cart)
   end
 
   def move_to_index
