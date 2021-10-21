@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
   before_action :basic_auth if Rails.env.production?
   before_action :store_current_location, unless: :devise_controller?
-  add_flash_types :success, :info, :warning, :danger
+  before_action :set_search
 
   private
 
@@ -17,5 +17,9 @@ class ApplicationController < ActionController::Base
 
   def after_sign_in_path_for(resource)
     stored_location_for(resource) || root_path
+  end
+
+  def set_search
+    @search = Book.ransack(params[:q])
   end
 end

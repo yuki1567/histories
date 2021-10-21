@@ -14,7 +14,7 @@
             <a class="nav-link active dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">カテゴリー</a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
               <% Category.all.each do |category| %>
-                <li><a class="dropdown-item" href="#"><%= category.name %></a></li>
+                <li><%= link_to category.name, search_books_path(@search, :'q[category_id_eq' => "#{category.id}"), class: "dropdown-item" %></li> 
               <% end %>
             </ul>
           </li>
@@ -44,8 +44,8 @@
             </li>   
           <% end %>
         </ul>
-        <%= form_with url: search_books_path, local:true, method: :get, class: "d-flex" do |f| %>
-          <%= f.text_field :keyword, class: "form-control me-2" %>
+        <%= search_form_for @search, url: search_books_path, class: "d-flex" do |f| %>
+          <%= f.text_field :title_or_author_cont, class: "form-control me-2" %>
           <%= f.submit "検索", class: "btn btn-warning col-3"%>
         <% end %>
         <% if user_signed_in? && current_user.admin? %>

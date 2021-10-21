@@ -306,3 +306,32 @@ RSpec.describe '本の削除', type: :system do
     end
   end
 end
+
+RSpec.describe '本の検索', type: :system do
+  let(:book) { FactoryBot.create(:book) }
+  
+  it '本のタイトルで検索すると一致する本の一覧が表示されている' do
+    # トップページに移動する
+    visit books_path
+    # フォームに入力する
+    fill_in 'keyword', with: book.title
+    # 検索ボタンを押す
+    click_on '検索'
+    # 検索一覧ページに遷移していることを確認する
+    expect(current_path).to eq(search_books_path)
+    # 検索したタイトルと一致する本が表示されていることを確認する
+    expect(page).to have_content(book.title)
+  end
+  it '本の作者で検索すると一致する本の一覧が表示されている' do
+    # トップページに移動する
+    visit books_path
+    # フォームに入力する
+    fill_in 'keyword', with: book.author
+    # 検索ボタンを押す
+    click_on '検索'
+    # 検索一覧ページに遷移していることを確認する
+    expect(current_path).to eq(search_books_path)
+    # 検索したタイトルと一致する本が表示されていることを確認する
+    expect(page).to have_content(book.author)
+  end
+end
