@@ -308,13 +308,13 @@ RSpec.describe '本の削除', type: :system do
 end
 
 RSpec.describe '本の検索', type: :system do
-  let(:book) { FactoryBot.create(:book) }
-  
+  let!(:book) { FactoryBot.create(:book, category_id: 1) }
+
   it '本のタイトルで検索すると一致する本の一覧が表示されている' do
     # トップページに移動する
     visit books_path
     # フォームに入力する
-    fill_in 'keyword', with: book.title
+    fill_in 'q_title_or_author_cont', with: book.title
     # 検索ボタンを押す
     click_on '検索'
     # 検索一覧ページに遷移していることを確認する
@@ -326,12 +326,24 @@ RSpec.describe '本の検索', type: :system do
     # トップページに移動する
     visit books_path
     # フォームに入力する
-    fill_in 'keyword', with: book.author
+    fill_in 'q_title_or_author_cont', with: book.author
     # 検索ボタンを押す
     click_on '検索'
     # 検索一覧ページに遷移していることを確認する
     expect(current_path).to eq(search_books_path)
     # 検索したタイトルと一致する本が表示されていることを確認する
     expect(page).to have_content(book.author)
+  end
+  it 'ヘッダーにあるカテゴリーを押すとそのカテゴリーに一致する本の一覧が表示されている' do
+    # トップページに移動する
+    visit books_path
+    # カテゴリーを押す
+    click_on "カテゴリー"
+    # カテゴリーを選択する
+    click_on "文芸" 
+    # 検索一覧ページに遷移していることを確認する
+    expect(current_path).to eq(search_books_path)
+    # 検索したタイトルと一致する本が表示されていることを確認する
+    expect(page).to have_content(book.title)
   end
 end
