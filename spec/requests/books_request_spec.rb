@@ -464,5 +464,27 @@ RSpec.describe 'Books', type: :request do
         expect(response.body).to include(book.category.name)
       end
     end
+    context 'カテゴリーのリンクを押して検索した場合' do
+      it 'searchアクションにリクエストすると正常にレスポンスが返ってくる' do
+        get search_books_path, params: book.category_id
+        expect(response.status).to eq 200
+      end
+      it 'searchアクションにリクエストするとレスポンスに登録済みの本の画像が存在する' do
+        get search_books_path, params: book.category_id
+        expect(response.body).to include("card-img-top")
+      end
+      it 'searchアクションにリクエストするとレスポンスに登録済みの本のタイトルが存在する' do
+        get search_books_path, params: book.category_id
+        expect(response.body).to include(book.title)
+      end
+      it 'searchアクションにリクエストするとレスポンスに登録済みの本の作者が存在する' do
+        get search_books_path, params: book.category_id
+        expect(response.body).to include(book.author)
+      end
+      it 'searchアクションにリクエストするとレスポンスに登録済みの本のカテゴリーが存在する' do
+        get search_books_path, params: book.category_id
+        expect(response.body).to include(book.category.name)
+      end
+    end
   end
 end
