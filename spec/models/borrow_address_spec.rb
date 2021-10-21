@@ -27,7 +27,7 @@ RSpec.describe BorrowAddress, type: :model do
       it 'postal_codeが空では借りられない' do
         borrow_address.postal_code = ''
         borrow_address.valid?
-        expect(borrow_address.errors.full_messages).to include("郵便番号を入力してください")
+        expect(borrow_address.errors.full_messages).to include('郵便番号を入力してください')
       end
       it 'postal_codeが３桁ハイフン４桁以外では借りられない' do
         borrow_address.postal_code = 'aaa-aaaa'
@@ -42,22 +42,22 @@ RSpec.describe BorrowAddress, type: :model do
       it 'prefecture_idが空では借りられない' do
         borrow_address.prefecture_id = ''
         borrow_address.valid?
-        expect(borrow_address.errors.full_messages).to include("都道府県を入力してください")
+        expect(borrow_address.errors.full_messages).to include('都道府県を入力してください')
       end
       it 'cityが空では借りられない' do
         borrow_address.city = ''
         borrow_address.valid?
-        expect(borrow_address.errors.full_messages).to include("市町村を入力してください")
+        expect(borrow_address.errors.full_messages).to include('市町村を入力してください')
       end
       it 'street_addressが空では借りられない' do
         borrow_address.street_address = ''
         borrow_address.valid?
-        expect(borrow_address.errors.full_messages).to include("番地を入力してください")
+        expect(borrow_address.errors.full_messages).to include('番地を入力してください')
       end
       it 'telephoneが空では借りられない' do
         borrow_address.phone_number = ''
         borrow_address.valid?
-        expect(borrow_address.errors.full_messages).to include("電話番号を入力してください")
+        expect(borrow_address.errors.full_messages).to include('電話番号を入力してください')
       end
       it 'telephoneが半角数値以外では借りられない' do
         borrow_address.phone_number = 'abcdefghijk'
@@ -77,7 +77,7 @@ RSpec.describe BorrowAddress, type: :model do
       it 'userが紐付いていないと借りられない' do
         borrow_address.user_id = nil
         borrow_address.valid?
-        expect(borrow_address.errors.full_messages).to include("Userを入力してください")
+        expect(borrow_address.errors.full_messages).to include('Userを入力してください')
       end
     end
   end

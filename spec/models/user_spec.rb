@@ -18,17 +18,17 @@ RSpec.describe User, type: :model do
       it 'nameが空では登録できない' do
         user.name = ''
         user.valid?
-        expect(user.errors.full_messages).to include("名前を入力してください")
+        expect(user.errors.full_messages).to include('名前を入力してください')
       end
       it 'kana_nameが空では登録できない' do
         user.kana_name = ''
         user.valid?
-        expect(user.errors.full_messages).to include("フリガナを入力してください")
+        expect(user.errors.full_messages).to include('フリガナを入力してください')
       end
       it 'emailが空では登録できない' do
         user.email = ''
         user.valid?
-        expect(user.errors.full_messages).to include("Eメールを入力してください")
+        expect(user.errors.full_messages).to include('Eメールを入力してください')
       end
       it '重複したemailが存在する場合登録できない' do
         user.save
@@ -44,7 +44,7 @@ RSpec.describe User, type: :model do
       it 'passwordが空では登録できない' do
         user.password = ''
         user.valid?
-        expect(user.errors.full_messages).to include("パスワードを入力してください")
+        expect(user.errors.full_messages).to include('パスワードを入力してください')
       end
       it 'passwordが5文字以下では登録できない' do
         user.password = '11111'
@@ -56,7 +56,7 @@ RSpec.describe User, type: :model do
         user.password = '111111'
         user.password_confirmation = ''
         user.valid?
-        expect(user.errors.full_messages).to include("パスワード（確認用）とパスワードの入力が一致しません")
+        expect(user.errors.full_messages).to include('パスワード（確認用）とパスワードの入力が一致しません')
       end
     end
   end

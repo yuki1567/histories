@@ -137,18 +137,18 @@ RSpec.describe 'ユーザー一覧', type: :system do
       # トップページに移動する
       visit root_path
       # ユーザー一覧のリンクを押す
-      click_on("ユーザー一覧")
+      click_on('ユーザー一覧')
       # ユーザー一覧ページに遷移していることを確認する
       expect(current_path).to eq(users_path)
       # ユーザー情報が表示されていることを確認する
       expect(page).to have_content(user.name)
       expect(page).to have_content(user.kana_name)
       expect(page).to have_content(user.email)
-      expect(page).to have_content("貸し出し中")
+      expect(page).to have_content('貸し出し中')
       # 編集、削除ボタンが表示されていることを確認する
-      expect(page).to have_selector(".bi-search")
-      expect(page).to have_selector(".bi-pencil")
-      expect(page).to have_selector(".bi-trash")
+      expect(page).to have_selector('.bi-search')
+      expect(page).to have_selector('.bi-pencil')
+      expect(page).to have_selector('.bi-trash')
     end
   end
   context 'ユーザー一覧が見られない場合' do
@@ -176,7 +176,7 @@ RSpec.describe 'マイページ', type: :system do
   let!(:borrow) { FactoryBot.create(:borrow, borrowing_book: 1, user_id: user.id) }
   let!(:borrow_book) { FactoryBot.create(:borrow_book, borrow_id: borrow.id) }
   let(:another_cart) { FactoryBot.create(:cart) }
-  let(:another_user) { another_cart.user }  
+  let(:another_user) { another_cart.user }
 
   context 'マイページを見られる場合' do
     it '管理者ユーザーでログイン状態ならマイページを見られる' do
@@ -189,9 +189,9 @@ RSpec.describe 'マイページ', type: :system do
       expect(page).to have_content(user.kana_name)
       expect(page).to have_content(user.email)
       # 登録情報の変更、借りた本の履歴、本返却確認済みボタンが表示されている
-      expect(page).to have_content("登録情報の変更")
-      expect(page).to have_content("借りた本の履歴")
-      expect(page).to have_content("返却確認済み")
+      expect(page).to have_content('登録情報の変更')
+      expect(page).to have_content('借りた本の履歴')
+      expect(page).to have_content('返却確認済み')
       # 現在借りている本が表示されている
       expect(page).to have_selector('img')
       expect(page).to have_content(borrow_book.book.title)
@@ -208,9 +208,9 @@ RSpec.describe 'マイページ', type: :system do
       expect(page).to have_content(user.kana_name)
       expect(page).to have_content(user.email)
       # 登録情報の変更、借りた本の履歴ボタンが表示されていて本の返却確認済みのボタンが表示されていない
-      expect(page).to have_content("登録情報の変更")
-      expect(page).to have_content("借りた本の履歴")
-      expect(page).to have_no_content("返却確認済み")
+      expect(page).to have_content('登録情報の変更')
+      expect(page).to have_content('借りた本の履歴')
+      expect(page).to have_no_content('返却確認済み')
       # 現在借りている本が表示されている
       expect(page).to have_selector('img')
       expect(page).to have_content(borrow_book.book.title)
@@ -241,7 +241,7 @@ RSpec.describe 'ユーザー情報の編集', type: :system do
   let(:cart) { FactoryBot.create(:cart) }
   let(:user) { cart.user }
   let(:another_cart) { FactoryBot.create(:cart) }
-  let(:another_user) { another_cart.user }  
+  let(:another_user) { another_cart.user }
 
   context 'ユーザー情報を編集できる場合' do
     it '管理者ユーザーでログイン状態ならユーザー情報を編集できる' do
@@ -250,7 +250,7 @@ RSpec.describe 'ユーザー情報の編集', type: :system do
       # そのユーザーのマイページに移動する
       visit user_path(user)
       # ユーザー情報変更ページへ遷移するボタンがあることを確認する
-      expect(page).to have_content("登録情報の変更")
+      expect(page).to have_content('登録情報の変更')
       # ユーザー情報編集ページに移動する
       visit edit_user_path(user)
       # すでに登録済みのユーザー情報が入っていることを確認する
@@ -266,9 +266,9 @@ RSpec.describe 'ユーザー情報の編集', type: :system do
       # 登録情報を編集する
       fill_in '名前', with: "#{user.name}編集した名前"
       # 編集してもUserモデルのカウントが変わらないことを確認する
-      expect {
+      expect do
         find('input[name="commit"]').click
-      }.to change { User.count }.by(0)
+      end.to change { User.count }.by(0)
       # マイページに遷移することを確認する
       expect(current_path).to eq(user_path(user))
       # マイページに先ほど編集したユーザー情報が表示されていることを確認する
@@ -280,7 +280,7 @@ RSpec.describe 'ユーザー情報の編集', type: :system do
       # マイページに移動する
       visit user_path(user)
       # ユーザー情報変更ページへ遷移するボタンがあることを確認する
-      expect(page).to have_content("登録情報の変更")
+      expect(page).to have_content('登録情報の変更')
       # ユーザー情報編集ページに移動する
       visit edit_user_path(user)
       # すでに登録済みのユーザー情報が入っていることを確認する
@@ -296,9 +296,9 @@ RSpec.describe 'ユーザー情報の編集', type: :system do
       # 登録情報を編集する
       fill_in '名前', with: "#{user.name}編集した名前"
       # 編集してもUserモデルのカウントが変わらないことを確認する
-      expect {
+      expect do
         find('input[name="commit"]').click
-      }.to change { User.count }.by(0)
+      end.to change { User.count }.by(0)
       # マイページに遷移することを確認する
       expect(current_path).to eq(user_path(user))
       # マイページに先ほど編集したユーザー情報が表示されていることを確認する
@@ -315,15 +315,15 @@ RSpec.describe 'ユーザー情報の編集', type: :system do
       expect(current_path).to eq(root_path)
     end
     it 'ログアウト状態ではユーザー情報の編集はできない' do
-       # マイページに移動する
-       visit user_path(user)
-       # トップページに遷移していることを確認する
-       expect(current_path).to eq(new_user_session_path)
+      # マイページに移動する
+      visit user_path(user)
+      # トップページに遷移していることを確認する
+      expect(current_path).to eq(new_user_session_path)
     end
   end
 end
 
-RSpec.describe 'ユーザーの削除', type: :system do 
+RSpec.describe 'ユーザーの削除', type: :system do
   let(:admin) { FactoryBot.create(:user, :a) }
   let!(:user) { FactoryBot.create(:user, :b) }
 
@@ -334,13 +334,13 @@ RSpec.describe 'ユーザーの削除', type: :system do
       # ユーザー一覧ページに移動する
       visit users_path
       # 削除ボタンがあることを確認する
-      expect(page).to have_selector(".bi-trash")
+      expect(page).to have_selector('.bi-trash')
       # 削除ボタンを押すとUserモデルのカウントがい減ることを確認する
-      find(".bi-trash").click
+      find('.bi-trash').click
       page.driver.browser.switch_to.alert.accept do
-        expect {
-          find("OK").click
-        }.to change { User.count }.by(-1)
+        expect do
+          find('OK').click
+        end.to change { User.count }.by(-1)
       end
       # ユーザー一覧ページに遷移したことを確認する
       expect(current_path).to eq(users_path)

@@ -1,16 +1,16 @@
 require 'rails_helper'
 
 RSpec.describe 'Users', type: :request do
-  let(:admin) { FactoryBot.create(:user, :a)}
+  let(:admin) { FactoryBot.create(:user, :a) }
   let!(:cart) { FactoryBot.create(:cart) }
   let(:user) { cart.user }
   let(:borrow) { FactoryBot.create(:borrow, user_id: user.id) }
   let!(:borrow_book) { FactoryBot.create(:borrow_book, borrow_id: borrow.id) }
   let(:user_params) do
-    { user: { name: "山田" } }
+    { user: { name: '山田' } }
   end
   let(:invalid_user_params) do
-    { user: { name: "" } }
+    { user: { name: '' } }
   end
 
   describe 'GET #index' do
@@ -36,7 +36,7 @@ RSpec.describe 'Users', type: :request do
       end
       it 'indexアクションにリクエストするとレスポンスに本を借りている場合は貸し出し中が表示されている' do
         get users_path
-        expect(response.body).to include("貸し出し中")
+        expect(response.body).to include('貸し出し中')
       end
       it 'indexアクションにリクエストするとレスポンスに詳細ボタンが存在する' do
         get users_path
@@ -81,7 +81,7 @@ RSpec.describe 'Users', type: :request do
       before do
         sign_in(admin)
       end
-  
+
       it 'showアクションにリクエストすると正常にレスポンスが返ってくる' do
         get user_path(user)
         expect(response.status).to eq 200
@@ -131,7 +131,7 @@ RSpec.describe 'Users', type: :request do
       before do
         sign_in(user)
       end
-  
+
       it 'showアクションにリクエストすると正常にレスポンスが返ってくる' do
         get user_path(user)
         expect(response.status).to eq 200
@@ -190,7 +190,7 @@ RSpec.describe 'Users', type: :request do
       before do
         sign_in(admin)
       end
-      
+
       it 'editアクションにリクエストすると正常にレスポンスが返ってくる' do
         get edit_user_path(user)
         expect(response.status).to eq 200
@@ -261,7 +261,7 @@ RSpec.describe 'Users', type: :request do
       end
       it 'エラーメッセージが表示されていること' do
         put user_path(user), params: invalid_user_params
-        expect(response.body).to include("error-message")
+        expect(response.body).to include('error-message')
       end
     end
   end

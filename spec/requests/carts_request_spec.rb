@@ -85,11 +85,11 @@ RSpec.describe 'Carts', type: :request do
       end
       it 'showアクションにリクエストするとレスポンスに詳細ボタンが存在する' do
         get user_cart_path(user, cart)
-        expect(response.body).to include("詳細")
+        expect(response.body).to include('詳細')
       end
       it 'showアクションにリクエストするとレスポンスに削除ボタンが存在する' do
         get user_cart_path(user, cart)
-        expect(response.body).to include("削除")
+        expect(response.body).to include('削除')
       end
     end
 

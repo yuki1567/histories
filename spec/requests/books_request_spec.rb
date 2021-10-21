@@ -256,7 +256,7 @@ RSpec.describe 'Books', type: :request do
       end
       it 'showアクションにリクエストするとレスポンスにカートボタンが存在する' do
         get book_path(book)
-        expect(response.body).to include("カートに入れる")
+        expect(response.body).to include('カートに入れる')
       end
     end
     context 'ログアウト状態の場合' do
@@ -286,7 +286,7 @@ RSpec.describe 'Books', type: :request do
       end
       it 'showアクションにリクエストするとレスポンスにカートボタンが存在する' do
         get book_path(book)
-        expect(response.body).to include("カートに入れる")
+        expect(response.body).to include('カートに入れる')
       end
     end
   end
@@ -422,23 +422,23 @@ RSpec.describe 'Books', type: :request do
   describe 'GET #search' do
     context '本のタイトルで検索した場合' do
       it 'searchアクションにリクエストすると正常にレスポンスが返ってくる' do
-        get search_books_path, params: book.title  
+        get search_books_path, params: book.title
         expect(response.status).to eq 200
       end
       it 'searchアクションにリクエストするとレスポンスに登録済みの本の画像が存在する' do
-        get search_books_path, params: book.title 
-        expect(response.body).to include("card-img-top")
+        get search_books_path, params: book.title
+        expect(response.body).to include('card-img-top')
       end
       it 'searchアクションにリクエストするとレスポンスに登録済みの本のタイトルが存在する' do
-        get search_books_path, params: book.title 
+        get search_books_path, params: book.title
         expect(response.body).to include(book.title)
       end
       it 'searchアクションにリクエストするとレスポンスに登録済みの本の作者が存在する' do
-        get search_books_path, params: book.title 
+        get search_books_path, params: book.title
         expect(response.body).to include(book.author)
       end
       it 'searchアクションにリクエストするとレスポンスに登録済みの本のカテゴリーが存在する' do
-        get search_books_path, params: book.title 
+        get search_books_path, params: book.title
         expect(response.body).to include(book.category.name)
       end
     end
@@ -448,8 +448,8 @@ RSpec.describe 'Books', type: :request do
         expect(response.status).to eq 200
       end
       it 'searchアクションにリクエストするとレスポンスに登録済みの本の画像が存在する' do
-        get search_books_path, params: book.author 
-        expect(response.body).to include("card-img-top")
+        get search_books_path, params: book.author
+        expect(response.body).to include('card-img-top')
       end
       it 'searchアクションにリクエストするとレスポンスに登録済みの本のタイトルが存在する' do
         get search_books_path, params: book.author
@@ -460,7 +460,7 @@ RSpec.describe 'Books', type: :request do
         expect(response.body).to include(book.author)
       end
       it 'searchアクションにリクエストするとレスポンスに登録済みの本のカテゴリーが存在する' do
-        get search_books_path, params: book.author 
+        get search_books_path, params: book.author
         expect(response.body).to include(book.category.name)
       end
     end
@@ -471,7 +471,7 @@ RSpec.describe 'Books', type: :request do
       end
       it 'searchアクションにリクエストするとレスポンスに登録済みの本の画像が存在する' do
         get search_books_path, params: book.category_id
-        expect(response.body).to include("card-img-top")
+        expect(response.body).to include('card-img-top')
       end
       it 'searchアクションにリクエストするとレスポンスに登録済みの本のタイトルが存在する' do
         get search_books_path, params: book.category_id

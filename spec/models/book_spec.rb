@@ -17,27 +17,27 @@ RSpec.describe Book, type: :model do
       it 'imageが空では登録できない' do
         book.image = nil
         book.valid?
-        expect(book.errors.full_messages).to include("画像を入力してください")
+        expect(book.errors.full_messages).to include('画像を入力してください')
       end
       it 'titleが空では登録できない' do
         book.title = ''
         book.valid?
-        expect(book.errors.full_messages).to include("タイトルを入力してください")
+        expect(book.errors.full_messages).to include('タイトルを入力してください')
       end
       it 'authorが空では登録できない' do
         book.author = ''
         book.valid?
-        expect(book.errors.full_messages).to include("作者を入力してください")
+        expect(book.errors.full_messages).to include('作者を入力してください')
       end
       it 'contentが空では登録できない' do
         book.content = ''
         book.valid?
-        expect(book.errors.full_messages).to include("説明を入力してください")
+        expect(book.errors.full_messages).to include('説明を入力してください')
       end
       it 'quantityが空では登録できない' do
         book.quantity = ''
         book.valid?
-        expect(book.errors.full_messages).to include("在庫を入力してください")
+        expect(book.errors.full_messages).to include('在庫を入力してください')
       end
       it 'quantityが半角数字以外では登録できない' do
         book.quantity = 'a'
@@ -47,7 +47,7 @@ RSpec.describe Book, type: :model do
       it 'category_idが空では登録できない' do
         book.category_id = ''
         book.valid?
-        expect(book.errors.full_messages).to include("カテゴリーを入力してください")
+        expect(book.errors.full_messages).to include('カテゴリーを入力してください')
       end
     end
   end
