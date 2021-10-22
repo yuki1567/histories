@@ -1,4 +1,5 @@
-<%= render "shared/header" %>
+<% breadcrumb :edit_user, @user %>
+<%= render "shared/breadcrumbs" %>
 <div class= "container">
   <h2 class= "pt-5 text-center">ユーザー情報の変更</h2>
 
@@ -26,4 +27,3 @@
    
   <% end %>
 </div>
-<%= render "shared/footer" %>

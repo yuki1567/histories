@@ -1,4 +1,4 @@
-<%= render "shared/header" %>
+<% breadcrumb :root %>
 <% if user_signed_in? && current_user.admin? %>
   <main>
     <div class="container">
@@ -67,4 +67,3 @@
     </div>
   </main>
 <% end %>
-<%= render "shared/footer" %>

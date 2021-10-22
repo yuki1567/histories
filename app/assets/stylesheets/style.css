@@ -13,3 +13,14 @@ ul li {
   width: 220px;
   height: 420px;
 }
+
+a {
+  text-decoration: none;
+}
+
+.current {
+  padding-left: 5px;
+  font-size: 15px;
+}
+
+

@@ -14,7 +14,7 @@
             <a class="nav-link active dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">カテゴリー</a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
               <% Category.all.each do |category| %>
-                <li><%= link_to category.name, search_books_path(@search, :'q[category_id_eq' => "#{category.id}"), class: "dropdown-item" %></li> 
+                <li><%= link_to category.name, search_books_path(@search, :'q[category_id_eq]' => "#{category.id}"), class: "dropdown-item" %></li> 
               <% end %>
             </ul>
           </li>

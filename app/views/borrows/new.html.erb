@@ -1,4 +1,5 @@
-<%= render "shared/header" %>
+<% breadcrumb :new_borrow, @user %>
+<%= render "shared/breadcrumbs" %>
 <main>
   <div class="container">
     <h2 class="pt-5 text-center">借りる本の確認</h2>
@@ -68,4 +69,3 @@
     <% end %>
   </div>
 </main>
-<%= render "shared/footer" %>

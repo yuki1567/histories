@@ -1,4 +1,4 @@
-<%= render "shared/header" %>
+<% breadcrumb :search %>
 <% if user_signed_in? && current_user.admin? %>
   <main>
     <div class="container">
@@ -42,6 +42,7 @@
   </main>
 <% else %>
   <main>
+    <%= render "shared/breadcrumbs" %>
     <div class="container">
       <% if @books.present? %>
         <div class="books row row-cols-1 row-cols-md-3 row-cols-xl-5 my-5 g-3">
@@ -70,4 +71,3 @@
     </div>
   </main>
 <% end %>
-<%= render "shared/footer" %>
