@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_07_134819) do
+ActiveRecord::Schema.define(version: 2021_10_22_084204) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name", null: false
@@ -90,6 +90,14 @@ ActiveRecord::Schema.define(version: 2021_10_07_134819) do
     t.index ["user_id"], name: "index_carts_on_user_id"
   end
 
+  create_table "comments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.text "text"
+    t.bigint "book_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["book_id"], name: "index_comments_on_book_id"
+  end
+
   create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -113,4 +121,5 @@ ActiveRecord::Schema.define(version: 2021_10_07_134819) do
   add_foreign_key "cart_books", "books"
   add_foreign_key "cart_books", "carts"
   add_foreign_key "carts", "users"
+  add_foreign_key "comments", "books"
 end

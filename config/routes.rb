@@ -8,6 +8,7 @@ Rails.application.routes.draw do
     collection do
       get 'search'
     end
+    resources :comments, only: [:create]
   end
   resources :users, only: [:index, :show, :edit, :update, :destroy] do
     resources :carts, only: [:show, :create, :destroy]

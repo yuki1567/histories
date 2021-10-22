@@ -7,6 +7,8 @@ class BooksController < ApplicationController
   end
 
   def show
+    @comment = Comment.new
+    @comments = @book.comments.includes(:book)
   end
 
   def new

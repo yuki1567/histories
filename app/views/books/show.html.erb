@@ -43,6 +43,23 @@
           <% end %>
         </div>
       </div>
+      <div class="mt-5 pt-5">
+        <% if user_signed_in? %>
+          <%= form_with url: book_comments_path(@book), model: @comment, local: true, class: "mx-auto" do |f| %>
+            <div class="comment-form d-flex justify-content-center">
+              <%= f.text_area :text, class: "comment_text col-6" %>
+              <%= f.submit "コメントする", class: "btn btn-success", id: "submit" %>
+            </div>
+          <% end %>
+        <% else %>
+          <strong>※※※ コメントの投稿には新規登録/ログインが必要です ※※※</strong>
+        <% end %>
+        <div id="comments">
+          <% @comments.reverse_each do |comment| %>
+            <p class="comment mt-3 border-bottom"><%= comment.created_at %> | <%= comment.text %></p>
+          <% end %>
+        </div>
+      </div>
     </div>
   </div>
 </main>
