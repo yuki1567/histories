@@ -12,6 +12,11 @@ crumb :book do |book|
   parent :root
 end
 
+crumb :edit_book do |book|
+  link "本情報編集", edit_book_path(book)
+  parent :book, book
+end
+
 crumb :cart do
   link "カート", user_cart_path(current_user, current_user.cart)
   parent :root
