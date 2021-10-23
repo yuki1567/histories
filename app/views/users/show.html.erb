@@ -23,8 +23,27 @@
       </div>
     </div>
     <h2 class="py-5 text-center">現在借りている本</h2>
-    <div class="books row row-cols-1 mb-5 g-3 ">
-      <% if @borrowing_book.present? %>
+    <% if @borrowing_book.present? %> 
+      <b><p class="text-center text-danger">※ご返却が期間を過ぎますと延滞料金が発生する場合がございます</p></b>
+      <div class="d-flex justify-content-center">
+        <ul class="list-group">
+          <li class="list-group-item d-flex">
+            <div class="list">返却予定日</div>
+            ： <div><%= @return_date %>（<%= @wdays[@return_date.wday] %>）</div>
+          </li>
+          <li class="list-group-item d-flex">
+            <div class="list">残り日数</div>
+            ： <div>
+                <% if @days_left < 0 %>
+                  返却予定日よりも<%= @days_left.abs %>日過ぎてます
+                <% else %>  
+                  <%= @days_left %>日
+                <% end %>
+              </div>
+          </li>
+        </ul>
+      </div>
+      <div class="books row row-cols-1 my-5 g-3">
         <% @borrow_books.each do |borrow_book| %>
           <div class="book">
             <%= link_to book_path(borrow_book.book), class: "text-decoration-none text-dark" do %>
@@ -45,9 +64,9 @@
             <% end %>
           </div>
         <% end %>
-      <% else %>
-        <b class="text-center">現在借りている本はありません</b>
-      <% end %>
-    </div>
+      </div>
+    <% else %>
+      <b><p class="text-center">現在借りている本はありません</p></b>
+    <% end %>
   </div>
 </main>

@@ -1,14 +1,17 @@
 ul li {
   list-style: none;
 }
+
 .card-img-top {
   width: 220px;
   height: 300px;
 }
+
 .card-img-left {
   width: 160px;
   height: 220px;
 }
+
 .index-card {
   width: 220px;
   height: 420px;
@@ -25,6 +28,10 @@ a {
 
 .comment-form {
   height: 35px;
+}
+
+.list {
+  width: 100px;
 }
 
 

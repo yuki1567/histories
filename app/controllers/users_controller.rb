@@ -9,8 +9,15 @@ class UsersController < ApplicationController
   end
 
   def show
-    @borrowing_book = @user.borrows.where(borrowing_book: 1)
+    @borrowing_book = @user.borrows.find_by(borrowing_book: 1)
     @borrow_books = BorrowBook.where(borrow_id: @borrowing_book)
+    if @borrowing_book.present?
+      @wdays = %w[日 月 火 水 木 金 土]
+      borrow_date = @borrowing_book.created_at.to_date
+      @return_date = borrow_date + 7
+      today_date = Date.today
+      @days_left = (@return_date - today_date).to_i
+    end
   end
 
   def edit
