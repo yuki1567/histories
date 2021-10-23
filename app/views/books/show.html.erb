@@ -2,11 +2,11 @@
 <%= render "shared/breadcrumbs" %>
 <main>
   <div class="container">
-    <div class="row align-items-md-stretch my-5 pt-5">
-      <% if user_signed_in? && current_user.admin.blank? %>
-        <%= render "shared/error_messages", model: current_user.cart %>
-        <%= render "shared/flash" %>
-      <% end %>
+    <% if user_signed_in? && current_user.admin.blank? %>
+      <%= render "shared/error_messages", model: current_user.cart %>
+      <%= render "shared/flash" %>
+    <% end %>
+    <div class="row align-items-md-stretch my-5">
       <div class="col-md-6 d-flex justify-content-center">
         <%= image_tag @book.image.variant(resize: "300x300"), class: "card-img-top" %>
       </div>

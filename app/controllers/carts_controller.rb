@@ -10,6 +10,7 @@ class CartsController < ApplicationController
     book = Book.find(params[:book_id])
     if @cart_books.where(book_id: book.id).present?
       @book = Book.find(params[:book_id])
+      @comments = @book.comments.includes(:book)
       flash.now[:danger] = '⚠️同じ本がすでにカートの中にあります'
       render template: 'books/show'
     else
@@ -19,6 +20,7 @@ class CartsController < ApplicationController
         redirect_to root_path
       else
         @book = Book.find(params[:book_id])
+        @comments = @book.comments.includes(:book)
         render template: 'books/show' and return
       end
     end

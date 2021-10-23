@@ -22,7 +22,6 @@ ja:
         street_address: 番地
         detail_address: 建物名
         phone_number: 電話番号
-ja:
   time:
     formats:
       default: "%Y-%m-%d"
