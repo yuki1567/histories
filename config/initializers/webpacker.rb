@@ -1,0 +1,1 @@
+Webpacker::Compiler.env["POSTCODEJP_API_KEY"] = ENV["POSTCODEJP_API_KEY"]
