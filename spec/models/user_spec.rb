@@ -18,45 +18,45 @@ RSpec.describe User, type: :model do
       it 'nameが空では登録できない' do
         user.name = ''
         user.valid?
-        expect(user.errors.full_messages).to include('名前を入力してください')
+        expect(user.errors).to be_added(:name, :blank)
       end
       it 'kana_nameが空では登録できない' do
         user.kana_name = ''
         user.valid?
-        expect(user.errors.full_messages).to include('フリガナを入力してください')
+        expect(user.errors).to be_added(:kana_name, :blank)
       end
       it 'emailが空では登録できない' do
         user.email = ''
         user.valid?
-        expect(user.errors.full_messages).to include('Eメールを入力してください')
+        expect(user.errors).to be_added(:email, :blank)
       end
       it '重複したemailが存在する場合登録できない' do
         user.save
         another_user = FactoryBot.build(:user, email: user.email)
         another_user.valid?
-        expect(another_user.errors.full_messages).to include('Eメールはすでに存在します')
+        expect(another_user.errors).to be_of_kind(:email, :taken)
       end
       it 'emailが＠なしでは登録できない' do
         user.email = '111aaacom'
         user.valid?
-        expect(user.errors.full_messages).to include('Eメールは不正な値です')
+        expect(user.errors).to be_of_kind(:email, :invalid)
       end
       it 'passwordが空では登録できない' do
         user.password = ''
         user.valid?
-        expect(user.errors.full_messages).to include('パスワードを入力してください')
+        expect(user.errors).to be_added(:password, :blank)
       end
       it 'passwordが5文字以下では登録できない' do
         user.password = '11111'
         user.password_confirmation = '11111'
         user.valid?
-        expect(user.errors.full_messages).to include('パスワードは6文字以上で入力してください')
+        expect(user.errors).to be_of_kind(:password, :too_short)
       end
       it 'passwordとpassword_confirmationが不一致では登録できない' do
         user.password = '111111'
         user.password_confirmation = ''
         user.valid?
-        expect(user.errors.full_messages).to include('パスワード（確認用）とパスワードの入力が一致しません')
+        expect(user.errors).to be_of_kind(:password_confirmation, :confirmation)
       end
     end
   end
