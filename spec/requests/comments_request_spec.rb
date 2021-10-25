@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "Comments", type: :request do
+RSpec.describe 'Comments', type: :request do
   let(:book) { FactoryBot.create(:book) }
   let(:comment_params) do
     { comment: { text: 'test', book_id: book.id } }

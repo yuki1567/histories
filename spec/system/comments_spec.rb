@@ -15,9 +15,9 @@ RSpec.describe 'コメント', type: :system do
       # コメントを入力する
       fill_in 'comment_text', with: comment.text
       # コメントボタンを押すとCommentモデルのカウントが１上がることを確認する
-      expect {
-        find_button("コメントする").click
-      }.to change { Comment.count }.by(1)
+      expect do
+        find_button('コメントする').click
+      end.to change { Comment.count }.by(1)
       # コメントが表示されていることを確認する
       expect(page).to have_content(comment.text)
     end
@@ -27,7 +27,7 @@ RSpec.describe 'コメント', type: :system do
       # 本情報詳細ページに移動する
       visit book_path(book)
       # コメントフォームがないことを確認する
-      expect(page).to have_no_content("コメントする")
+      expect(page).to have_no_content('コメントする')
     end
   end
 end
