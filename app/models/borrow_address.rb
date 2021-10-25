@@ -5,6 +5,7 @@ class BorrowAddress
 
   with_options presence: true do
     validates :user_id
+    validates :book_ids
     validates :postal_code, format: { with: /\A[0-9]{3}-[0-9]{4}\z/, message: 'が無効です。例のように入力してください' }
     validates :prefecture_id
     validates :city
