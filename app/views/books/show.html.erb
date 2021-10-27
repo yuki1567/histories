@@ -43,7 +43,7 @@
           <% end %>
         </div>
       </div>
-      <div class="mt-5 pt-5">
+      <div class="mt-5 pt-5 col-md-6 mx-auto">
         <% if user_signed_in? %>
           <%= form_with url: book_comments_path(@book), model: @comment, local: true do |f| %>
             <div class="comment-form d-flex justify-content-center">
