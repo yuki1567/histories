@@ -41,7 +41,7 @@ class CartsController < ApplicationController
 
   def set_cart_books
     @cart = current_user.cart
-    @cart_books = @cart.cart_books.includes(:cart)
+    @cart_books = @cart.cart_books.includes(:cart).order('created_at DESC')
   end
 
   def move_to_index
