@@ -48,6 +48,9 @@ class BooksController < ApplicationController
 
   def search
     @books = @search.result
+    if params[:q][:category_id_eq]
+      @category = Category.find(params[:q][:category_id_eq])
+    end
   end
 
   private

@@ -2,9 +2,14 @@ crumb :root do
   link '<i class="bi bi-book"></i>HISTORIES'.html_safe, root_path 
 end
 
-crumb :search do
-  link "#{params[:q][:title_or_author_cont]}", search_books_path
-  parent :root
+crumb :search do |category|
+  if params[:q][:category_id_eq]
+    link "#{category.name}", search_books_path
+    parent :root, category
+  else
+    link "#{params[:q][:title_or_author_cont]}", search_books_path
+    parent :root
+  end
 end
 
 crumb :book do |book|
