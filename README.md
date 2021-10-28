@@ -119,7 +119,7 @@ HTML, CSS, JavaScript
 MySQL
 
 ## インフラ
-AWS(EC2)
+AWS(EC2), Capistrano
 
 ## Webサーバー（本番環境）
 Nginx
