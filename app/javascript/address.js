@@ -10,6 +10,7 @@ const initPostCodeJp = () => {
     PostCodeJp.add(new postcodejp.address.StateSelectbox(prefecture).byText());
     PostCodeJp.add(new postcodejp.address.TownTextbox(city));
     PostCodeJp.add(new postcodejp.address.StreetTextbox(street_address));
+    PostCodeJp.setClearAddressIfNotFound(true);
     PostCodeJp.observe();
   };
 };

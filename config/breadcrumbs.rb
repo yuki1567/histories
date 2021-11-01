@@ -4,6 +4,7 @@ end
 
 crumb :search do |category|
   if params[:q][:category_id_eq]
+    category = Category.find(params[:q][:category_id_eq])
     link "#{category.name}", search_books_path
     parent :root, category
   else

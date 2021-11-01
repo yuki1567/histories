@@ -21,11 +21,7 @@
                 <td><%= book.title %></p></td>
                 <td><%= book.author %></td>
                 <td class="category-name"><%= book.category.name %></td>
-                <% if book.quantity == 0 %>
-                  <td>貸し出し中</td>
-                <% else %>
-                  <td><%= book.quantity %>冊</td>
-                <% end %>
+                <td><%= book.quantity %></td>
                 <td>
                   <div class="d-flex">
                     <%= link_to "", book_path(book), class: "btn btn-success bi bi-search" %> 

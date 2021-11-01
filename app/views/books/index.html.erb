@@ -2,11 +2,29 @@
 <% if user_signed_in? && current_user.admin? %>
   <main>
     <div class="container">
+      <%= search_form_for @search, url: search_books_path do |f| %>
+        <div class="row">
+          <%= f.label :id_eq, '管理番号', class: "form-label col-sm-2" %>
+          <div class="col-sm-4">
+            <%= f.number_field :id_eq, class: "form-control" %>
+          </div>
+        </div>
+        <%= f.label :title_cont, 'タイトル', class: "form-label" %>
+        <%= f.search_field :title_cont, class: "form-control" %>
+        <%= f.label :author_cont, '作者', class: "form-label" %>
+        <%= f.search_field :author_cont, class: "form-control" %> 
+        <%= f.label :category_id_eq, 'カテゴリー', class: "form-label" %>
+        <%= f.collection_select(:category_id_eq, Category.all, :id, :name, {include_blank: '指定なし'}, {class: "select-box form-select"}) %>
+        <%= f.label :quantity_eq, '在庫数', class: "form-label" %>
+        <%= f.number_field :quantity_eq, class: "form-control" %>
+
+        <%= f.submit '検索', class: "btn btn-warning col-3" %>
+      <% end %>
       <div class="table-responsive my-5">
         <table class="table table-striped text-nowrap">
           <thead>
             <tr>
-              <th scope="col"></th>
+              <th scope="col">管理番号</th>
               <th scope="col">タイトル</th>
               <th scope="col">作者</th>
               <th scope="col">カテゴリー</th>
@@ -21,11 +39,7 @@
                 <td><%= book.title %></p></td>
                 <td><%= book.author %></td>
                 <td class="category-name"><%= book.category.name %></td>
-                <% if book.quantity == 0 %>
-                  <td>貸し出し中</td>
-                <% else %>
-                  <td><%= book.quantity %>冊</td>
-                <% end %>
+                <td><%= book.quantity %></td>
                 <td>
                   <div class="d-flex">
                     <%= link_to "", book_path(book), class: "btn btn-success bi bi-search" %> 

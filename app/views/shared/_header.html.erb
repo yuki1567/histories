@@ -45,7 +45,7 @@
           <% end %>
         </ul>
         <%= search_form_for @search, url: search_books_path, class: "d-flex" do |f| %>
-          <%= f.text_field :title_or_author_cont, class: "form-control me-2" %>
+          <%= f.search_field :title_or_author_cont, class: "form-control me-2" %>
           <%= f.submit "検索", class: "btn btn-warning col-3"%>
         <% end %>
         <% if user_signed_in? && current_user.admin? %>
