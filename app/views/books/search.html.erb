@@ -2,6 +2,7 @@
 <% if user_signed_in? && current_user.admin? %>
   <main>
     <div class="container">
+      <%= render "shared/search_form" %>
       <div class="table-responsive my-5">
         <table class="table table-striped text-nowrap">
           <thead>
